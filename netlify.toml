@@ -2,3 +2,7 @@
   command = "yarn build"
   functions = "built-lambda"
   publish = "build"
+
+[[redirects]]
+  from = "/.netlify/functions/hello"
+  to = "/hello"
