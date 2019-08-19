@@ -84,6 +84,7 @@ export async function handler(event, context) {
     console.log(err); // output to netlify function log
     return {
       statusCode: 500,
+      headers: { "Content-type": "application/json" },
       body: JSON.stringify({
         msg: err.message,
         SOUNDCLOUD_URL,
