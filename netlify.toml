@@ -6,5 +6,7 @@
 [[redirects]]
   from = "/updateEpisodes"
   to = "/.netlify/functions/updateEpisodes"
+
+[[redirects]]
   from = "/getEpisodes"
   to = "/.netlify/functions/getEpisodes"
