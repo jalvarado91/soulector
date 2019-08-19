@@ -19,7 +19,7 @@ async function getAllTracks() {
   let allTracks = await trackCollection
     .find({})
     .sort({
-      created_time: -1
+      created_time: 1
     })
     .toArray();
 
