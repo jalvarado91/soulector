@@ -31,7 +31,7 @@ async function getAllTracks() {
 export async function handler(event, context) {
   try {
     let tracks = await getAllTracks();
-    console.log("successfully updated tracks");
+    console.log("successfully retrieved tracks");
     return {
       statusCode: 200,
       headers: { "Content-type": "application/json" },
