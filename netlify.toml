@@ -4,5 +4,7 @@
   publish = "build"
 
 [[redirects]]
-  from = "/hello"
-  to = "/.netlify/functions/hello"
+  from = "/updateEpisodes"
+  to = "/.netlify/functions/updateEpisodes"
+  from = "/getEpisodes"
+  to = "/.netlify/functions/getEpisodes"

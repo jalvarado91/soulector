@@ -13,6 +13,11 @@ async function connectToDB() {
   return client;
 }
 
+function createLargeSoundtrackThumbUrl(url) {
+  const newUrl = url.replace("-large", "-t500x500");
+  return newUrl;
+}
+
 async function getSoundCloudTracks() {
   let res = await axios.get(SOUNDCLOUD_URL);
 
@@ -22,8 +27,8 @@ async function getSoundCloudTracks() {
     created_time: new Date(track.created_at),
     key: track.id,
     name: track.title,
-    url: track.uri,
-    picture_large: track.artwork_url
+    url: track.permalink_url,
+    picture_large: createLargeSoundtrackThumbUrl(track.artwork_url)
   }));
 
   const client = await connectToDB();
