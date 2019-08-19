@@ -60,15 +60,26 @@ async function getSoundCloudTracks() {
     insertRes.result
   );
 
-  return client.close();
+  await client.close();
+
+  return missingTracks.map(track => track.name);
 }
 
 export async function handler(event, context) {
   try {
     console.log(SOUNDCLOUD_URL, MONGO_CONNECTION_STRING);
 
-    await getSoundCloudTracks();
+    let retrieved = await getSoundCloudTracks();
     console.log("successfully updated tracks");
+
+    return {
+      statusCode: 200,
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        msg: "Successfully Fetched New Tracks",
+        retrievedTracks: retrieved
+      })
+    };
   } catch (err) {
     console.log(err); // output to netlify function log
     return {
