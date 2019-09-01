@@ -1,14 +1,10 @@
 import React, { Component } from "react";
-import "./App.css";
+import "./index.css";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <h1>Soulector</h1>
-      </div>
-    );
-  }
+export function App() {
+  return (
+    <div className="h-screen flex items-center justify-center">
+      <h1 className="text-3xl font-bold">Soulector</h1>
+    </div>
+  );
 }
-
-export default App;
