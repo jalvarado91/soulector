@@ -1,5 +1,5 @@
 [build]
-  command = "yarn build"
+  command = "npm run build"
   functions = "built-lambda"
   publish = "build"
 
@@ -8,5 +8,5 @@
   to = "/.netlify/functions/updateEpisodes"
 
 [[redirects]]
-  from = "/getEpisodes"
+  from = "/api/getEpisodes"
   to = "/.netlify/functions/getEpisodes"
