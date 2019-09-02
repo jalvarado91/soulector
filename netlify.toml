@@ -8,5 +8,5 @@
   to = "/.netlify/functions/updateEpisodes"
 
 [[redirects]]
-  from = "/api/getEpisodes"
+  from = "/getEpisodes"
   to = "/.netlify/functions/getEpisodes"
