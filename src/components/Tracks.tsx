@@ -5,11 +5,11 @@ import { TracksStateContext } from "../context/TracksContext";
 import { FixedSizeList as List } from "react-window";
 
 export function Tracks() {
-  const { tracks } = useContext(TracksStateContext);
+  const { tracks, loading } = useContext(TracksStateContext);
 
   return (
     <div>
-      <TracksView tracks={tracks} />
+      {loading ? "loading from reducer" : <TracksView tracks={tracks} />}
     </div>
   );
 }
