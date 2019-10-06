@@ -23,5 +23,5 @@ export function formatTimeSecs(timeSeconds: number) {
 
 export function formatDate(dateString: string) {
   var date = new Date(dateString);
-  return format(date, "MMMM Do yyyy");
+  return format(date, "MMMM do yyyy");
 }
