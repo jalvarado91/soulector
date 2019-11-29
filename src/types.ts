@@ -1,6 +1,6 @@
 export type ITrack = {
   _id: string;
-  source: string;
+  source: "SOUNDCLOUD" | "MIXCLOUD";
   duration: number;
   created_time: string;
   key: number;

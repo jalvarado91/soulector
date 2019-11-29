@@ -24,7 +24,7 @@
     "start": "run-p start:css start:cra",
     "start:cra": "react-scripts start",
     "start:css": "postcss src/styles/index.css -o src/index.css -w",
-    "start:lambda": "netlify-lambda serve src/lambda --config ./webpack.functions.js ",
+    "start:lambda": "netlify-lambda serve src/lambda --config ./webpack.functions.js --port 9001",
     "build": "NODE_ENV=production npm run build:css && npm run build:lambda && npm run build:app",
     "build:app": "react-scripts build",
     "build:css": "postcss src/styles/index.css -o src/index.css",
@@ -32,7 +32,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:9000",
+  "proxy": "http://localhost:9001",
   "eslintConfig": {
     "extends": "react-app"
   },
