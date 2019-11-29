@@ -1,18 +1,19 @@
 import React from "react";
 import { cx } from "emotion";
 import { formatDate, formatTimeSecs } from "../helpers";
-import { PauseIcon } from "./Icons";
+import { SpeakerIcon } from "./Icons";
 import { ITrack } from "../types";
 
 export type TrackProps = {
   track: ITrack;
   playing?: boolean;
-};
+} & React.HTMLAttributes<HTMLButtonElement>;
 
 export function Track(props: TrackProps) {
-  const { track, playing = false } = props;
+  const { track, playing = false, onClick } = props;
   return (
     <button
+      onClick={onClick}
       className={cx(
         "flex flex-column items-center justify-between text-left cursor-pointer w-full p-3 rounded-lg border border-transparent",
         "hover:shadow-lg hover:border hover:border-gray-200",
@@ -29,12 +30,9 @@ export function Track(props: TrackProps) {
           {playing && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="absolute inset-0 bg-indigo-600 opacity-75" />
-              {/* <div className="group-hover:hidden relative leading-none p-1 text-white rounded-full overflow-hidden">
-              <div className="absolute inset-0 bg-indigo-800 opacity-50" />
-              <SpeakerIcon className="relative block group-hover:hidden fill-current w-6 h-6" />
-            </div> */}
               <div className="relative leading-none p-1 bg-white group-hover:bg-white rounded-full text-indigo-600 hover:bg-gray-200 hover:shadow-sm">
-                <PauseIcon className="fill-current w-6 h-6" />
+                <SpeakerIcon className="relative block group-hover:hidden fill-current w-6 h-6" />
+                {/* <PauseIcon className="fill-current w-6 h-6" /> */}
               </div>
             </div>
           )}

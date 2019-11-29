@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import "./index.css";
 import { TracksContextController } from "./context/TracksContext";
-import { Tracks } from "./components/Tracks";
+import { PlayerContextController } from "./context/PlayerContext";
+import { TracksContainer } from "./components/Tracks";
 import { Soulector } from "./components/Icons";
+import { PlayerContainer } from "./components/PlayerContainer";
 
 export function App() {
   return (
@@ -16,7 +18,10 @@ export function App() {
           <Soulector className="w-8 mr-2" />
           <div className="text-2xl font-bold">Soulector</div>
         </div>
-        <Tracks />
+        <PlayerContextController>
+          <TracksContainer />
+          <PlayerContainer />
+        </PlayerContextController>
       </div>
     </TracksContextController>
   );
