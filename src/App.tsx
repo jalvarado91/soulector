@@ -5,10 +5,12 @@ import { PlayerContextController } from "./context/PlayerContext";
 import { TracksContainer } from "./components/Tracks";
 import { Soulector } from "./components/Icons";
 import { PlayerContainer } from "./components/PlayerContainer";
+import { Helmet } from "react-helmet";
 
 export function App() {
   return (
     <TracksContextController>
+      <Helmet titleTemplate="%s | Soulector" defaultTitle="Soulector"></Helmet>
       {/* <div className="h-screen flex items-center justify-center">
         <h1 className="text-3xl font-bold">Soulector</h1>
       </div>
