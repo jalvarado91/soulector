@@ -85,7 +85,7 @@ export function Tracks({
   }, [focusTrackId, tracks]);
 
   return (
-    <div className="flex h-full justify-center border-2 border-red-500 relative">
+    <div className="flex h-full justify-center border-2 relative">
       <div className="absolute border-blue-500 right-0 bottom-0 mb-5 mr-5 z-10">
         <button
           onClick={() => onRandomClick()}
