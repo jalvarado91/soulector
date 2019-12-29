@@ -15,7 +15,7 @@ export function App() {
         <h1 className="text-3xl font-bold">Soulector</h1>
       </div>
       <hr /> */}
-      <div className="flex flex-col h-screen text-gray-900">
+      <div className="flex flex-col h-full text-gray-900">
         <div className="px-6 py-3 shadow-md flex items-center">
           <Soulector className="w-8 h-8 mr-2" />
           <div className="text-2xl font-bold">Soulector</div>

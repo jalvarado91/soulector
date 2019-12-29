@@ -626,6 +626,12 @@ video {
   }
 }
 
+body,
+html,
+#root {
+  height: 100%;
+}
+
 @font-face {
   font-family: "Space Grotesk";
 
