@@ -18,7 +18,10 @@ import { cx } from "emotion";
 import { ShuffleIcon, Soulector } from "./Icons";
 import { sample } from "lodash-es";
 
-export function TracksContainer() {
+type TracksContainerProps = {
+  filterText?: string;
+};
+export function TracksContainer({ filterText }: TracksContainerProps) {
   const { currentTrackId } = useContext(PlayerContextState);
   const dispatch = useContext(PlayerContextDispatcher);
   const { tracks, loading: tracksLoading } = useContext(TracksStateContext);
@@ -47,13 +50,24 @@ export function TracksContainer() {
     }
   }
 
+  const filteredTracks = React.useMemo(() => {
+    if (!filterText) {
+      return tracks;
+    }
+
+    return tracks.filter(track =>
+      track.name.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())
+    );
+  }, [filterText, tracks]);
+
   return (
     <React.Fragment>
       {tracksLoading ? (
         <TracksLoading />
       ) : (
         <Tracks
-          tracks={tracks}
+          filterText={filterText}
+          tracks={filteredTracks}
           currentTrackId={currentTrackId}
           onTrackClick={onTrackClick}
           onRandomClick={onRandomClick}
@@ -75,11 +89,14 @@ function TracksLoading() {
 
 type BeforeListProps = {
   numTracks: number;
+  filterText?: string;
 };
-function BeforeList({ numTracks }: BeforeListProps) {
+function BeforeList({ numTracks, filterText }: BeforeListProps) {
   return (
     <div className="px-4 flex item-center mt-4 mb-2">
-      <div className="font-semibold mr-auto text-indigo-900">All Episodes</div>
+      <div className="font-semibold mr-auto text-indigo-900">
+        {filterText ? `Episodes matching "${filterText}"` : "All Episodes"}
+      </div>
       <div className="font-semibold text-gray-600">{numTracks} Total</div>
     </div>
   );
@@ -91,6 +108,7 @@ type TracksProps = {
   onTrackClick: (trackId: string) => void;
   onRandomClick: () => void;
   focusTrackId?: string;
+  filterText?: string;
 };
 
 export function Tracks({
@@ -98,7 +116,8 @@ export function Tracks({
   onTrackClick,
   currentTrackId,
   onRandomClick,
-  focusTrackId
+  focusTrackId,
+  filterText
 }: TracksProps) {
   const listRef = useRef<List>(null);
 
@@ -128,21 +147,23 @@ export function Tracks({
     </div>
   ) : (
     <div className="flex h-full justify-center border-2 relative">
-      <div className="absolute border-blue-500 right-0 bottom-0 mb-5 mr-5 z-10">
-        <button
-          onClick={() => onRandomClick()}
-          className={cx(
-            "bg-indigo-600 hover:bg-indigo-700 text-white font-semibold",
-            "py-3 px-12",
-            "rounded-full",
-            "shadow-md",
-            "flex items-center"
-          )}
-        >
-          <ShuffleIcon className="fill-current w-5 h-5" />
-          <span className="ml-2">Play Random</span>
-        </button>
-      </div>
+      {!filterText && (
+        <div className="absolute border-blue-500 right-0 bottom-0 mb-5 mr-5 z-10">
+          <button
+            onClick={() => onRandomClick()}
+            className={cx(
+              "bg-indigo-600 hover:bg-indigo-700 text-white font-semibold",
+              "py-3 px-12",
+              "rounded-full",
+              "shadow-md",
+              "flex items-center"
+            )}
+          >
+            <ShuffleIcon className="fill-current w-5 h-5" />
+            <span className="ml-2">Play Random</span>
+          </button>
+        </div>
+      )}
       {tracks.length > 0 && (
         <div className="flex-auto">
           <AutoSizer>
@@ -175,7 +196,10 @@ export function Tracks({
                       <div className="max-w-4xl m-auto">
                         {index === 0 && (
                           <div>
-                            <BeforeList numTracks={tracks.length} />
+                            <BeforeList
+                              filterText={filterText}
+                              numTracks={tracks.length}
+                            />
                           </div>
                         )}
                         <Track
