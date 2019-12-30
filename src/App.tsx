@@ -28,8 +28,7 @@ export function App() {
           ) : (
             <React.Fragment>
               <div className="flex items-center">
-                <Soulector className="w-8 h-8 mr-2" />
-                <div className="text-2xl font-bold">Soulector</div>
+                <Logo />
               </div>
               <div className="flex items-center ml-auto">
                 <button
@@ -48,6 +47,15 @@ export function App() {
         </PlayerContextController>
       </div>
     </TracksContextController>
+  );
+}
+
+function Logo() {
+  return (
+    <React.Fragment>
+      <Soulector className="w-8 h-8 mr-2" />
+      <div className="text-2xl font-bold">Soulector</div>
+    </React.Fragment>
   );
 }
 
@@ -71,25 +79,30 @@ function NavbarSearch({
 
   return (
     <React.Fragment>
-      <div className="flex flex-grow items-center relative">
-        <div className="text-gray-500 absolute pl-4">
-          <SearchIcon className="fill-current w-6 h-6"></SearchIcon>
-        </div>
-        <input
-          ref={searchRef}
-          value={searchText}
-          onChange={e => onSearchChange(e.target.value)}
-          type="text"
-          className="w-full py-2 pl-12 pl-3 rounded-lg bg-gray-200 text-gray-900 outline-none focus:bg-gray-300 focus:border-gray-400"
-          placeholder="Search for episodes..."
-        ></input>
-        <div className="flex items-center ml-auto absolute right-0 mr-3">
-          <button
-            className="p-2 text-gray-700 hover:bg-gray-400 hover:text-gray-600 hover:shadow-sm rounded-lg focus:outline-none"
-            onClick={() => onCloseClick()}
-          >
-            <TimesIcon className="fill-current w-3 h-3"></TimesIcon>
-          </button>
+      <div className="hidden md:flex item-center">
+        <Logo />
+      </div>
+      <div className="mx-full md:max-w-xl w-full ml-auto">
+        <div className="flex flex-grow items-center relative">
+          <div className="text-gray-500 absolute pl-4">
+            <SearchIcon className="fill-current w-6 h-6"></SearchIcon>
+          </div>
+          <input
+            ref={searchRef}
+            value={searchText}
+            onChange={e => onSearchChange(e.target.value)}
+            type="text"
+            className="w-full py-2 pl-12 pl-3 rounded-lg bg-gray-200 text-gray-900 outline-none focus:bg-gray-300 focus:border-gray-400"
+            placeholder="Search for episodes..."
+          ></input>
+          <div className="flex items-center ml-auto absolute right-0 mr-3">
+            <button
+              className="p-2 text-gray-700 hover:bg-gray-400 hover:text-gray-600 hover:shadow-sm rounded-lg focus:outline-none"
+              onClick={() => onCloseClick()}
+            >
+              <TimesIcon className="fill-current w-3 h-3"></TimesIcon>
+            </button>
+          </div>
         </div>
       </div>
     </React.Fragment>
