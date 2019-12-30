@@ -9,7 +9,7 @@ import {
   PlayerContextDispatcher
 } from "../context/PlayerContext";
 import { cx } from "emotion";
-import { ShuffleIcon } from "./Icons";
+import { ShuffleIcon, Soulector } from "./Icons";
 import { sample } from "lodash-es";
 
 export function TracksContainer() {
@@ -44,7 +44,7 @@ export function TracksContainer() {
   return (
     <React.Fragment>
       {tracksLoading ? (
-        "loading from reducer"
+        <TracksLoading />
       ) : (
         <Tracks
           tracks={tracks}
@@ -55,6 +55,15 @@ export function TracksContainer() {
         />
       )}
     </React.Fragment>
+  );
+}
+
+function TracksLoading() {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center animate-fade-loop">
+      <Soulector className="w-10 h-10" />
+      <div className="font-semibold">Loading Tracks</div>
+    </div>
   );
 }
 

@@ -687,6 +687,25 @@ html,
   font-style: normal;
 }
 
+@-webkit-keyframes fadeInOutAniomation {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInOutAniomation {
+  from {
+    opacity: 0;
+  }
+}
+
+.animate-fade-loop {
+  -webkit-animation: fadeInOutAniomation 1.6s infinite alternate;
+          animation: fadeInOutAniomation 1.6s infinite alternate;
+  -webkit-animation-delay: -1.3s;
+          animation-delay: -1.3s;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

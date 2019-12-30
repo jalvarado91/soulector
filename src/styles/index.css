@@ -48,4 +48,15 @@ html,
   font-style: normal;
 }
 
+@keyframes fadeInOutAniomation {
+  from {
+    opacity: 0;
+  }
+}
+
+.animate-fade-loop {
+  animation: fadeInOutAniomation 1.6s infinite alternate;
+  animation-delay: -1.3s;
+}
+
 @tailwind utilities;
