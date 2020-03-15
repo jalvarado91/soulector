@@ -6,12 +6,21 @@ import { TracksContainer } from "./components/Tracks";
 import { Soulector, SearchIcon, TimesIcon } from "./components/Icons";
 import { PlayerContainer } from "./components/PlayerContainer";
 import { Helmet } from "react-helmet";
+import TracksScreen from "./TracksScreen";
+
+const newApp = true;
 
 export function App() {
   const [searchActive, setSearchActive] = useState(false);
   const [searchText, setSearchText] = useState("");
 
-  return (
+  return newApp ? (
+    <TracksScreen
+      onSearchChange={setSearchText}
+      onSearchClose={() => setSearchText("")}
+      searchText={searchText}
+    />
+  ) : (
     <TracksContextController>
       <Helmet titleTemplate="%s | Soulector" defaultTitle="Soulector"></Helmet>
       <div className="flex flex-col h-full text-gray-900">

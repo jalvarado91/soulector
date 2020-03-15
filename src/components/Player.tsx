@@ -1,14 +1,15 @@
 import React from "react";
-import { ITrack } from "../types";
+import { TrackModel } from "../context/TracksContext";
+// import { ITrack } from "../types";
 
 export type PlayerProps = {
-  track: ITrack;
+  track: TrackModel;
 };
 
 export function Player(props: PlayerProps) {
   const { track } = props;
 
-  return track.source === "SOUNDCLOUD" ? (
+  return track.source === "soundcloud" ? (
     <SoundCloudWidgetPlayer track={track} />
   ) : (
     <MixCloudWidgetPlayer track={track} />

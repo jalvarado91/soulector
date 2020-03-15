@@ -1,91 +1,10 @@
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  useLayoutEffect
-} from "react";
-import { ITrack } from "../types";
-import { Track } from "./Track";
-import { TracksStateContext, TrackModel } from "../context/TracksContext";
+import React, { useRef, useState, useLayoutEffect } from "react";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
-import {
-  PlayerContextState,
-  PlayerContextDispatcher
-} from "../context/PlayerContext";
-import { cx } from "emotion";
-import { ShuffleIcon, Soulector } from "./Icons";
-import { sample } from "lodash-es";
-
-type TracksContainerProps = {
-  filterText?: string;
-};
-export function TracksContainer({ filterText }: TracksContainerProps) {
-  const { currentTrackId } = useContext(PlayerContextState);
-  const dispatch = useContext(PlayerContextDispatcher);
-  const { tracks, loading: tracksLoading } = useContext(TracksStateContext);
-
-  const onTrackClick = React.useCallback(
-    (trackId: string) => {
-      dispatch({
-        type: "PLAYER_PLAY",
-        payload: {
-          trackId
-        }
-      });
-    },
-    [dispatch]
-  );
-
-  function onRandomClick() {
-    let track = sample(tracks);
-    if (track) {
-      dispatch({
-        type: "PLAYER_PLAY",
-        payload: {
-          trackId: track.id
-        }
-      });
-    }
-  }
-
-  const filteredTracks = React.useMemo(() => {
-    if (!filterText) {
-      return tracks;
-    }
-
-    return tracks.filter(track =>
-      track.name.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())
-    );
-  }, [filterText, tracks]);
-
-  return (
-    <React.Fragment>
-      {tracksLoading ? (
-        <TracksLoading />
-      ) : (
-        <Tracks
-          filterText={filterText}
-          tracks={filteredTracks}
-          currentTrackId={currentTrackId}
-          onTrackClick={onTrackClick}
-          onRandomClick={onRandomClick}
-          focusTrackId={currentTrackId}
-        />
-      )}
-    </React.Fragment>
-  );
-}
-
-function TracksLoading() {
-  return (
-    <div className="w-full h-full flex flex-col items-center justify-center animate-fade-loop">
-      <Soulector className="w-10 h-10" />
-      <div className="font-semibold">Loading Tracks</div>
-    </div>
-  );
-}
+import { TrackModel } from "../../context/TracksContext";
+import { Track } from "../../components/Track";
+import { ShuffleButton } from "../../components/ShuffleButton";
+import useFocusReactWindowItem from "./useFocusReactWindowItem";
 
 type BeforeListProps = {
   numTracks: number;
@@ -123,25 +42,21 @@ export function Tracks({
 
   const beforeListRef = useRef<HTMLDivElement | null>(null);
   const [beforeListHight, setBeforeListHeight] = useState(-1);
+  const isPreContentMeasured = beforeListHight > 0;
+  const currentTrackIndex = tracks.findIndex(t => t.id === focusTrackId);
+  
   useLayoutEffect(() => {
     if (beforeListRef.current) {
       const domHeight = beforeListRef.current.getBoundingClientRect().height;
       setBeforeListHeight(domHeight);
     }
   }, [beforeListHight]);
-
-  useEffect(() => {
-    if (listRef.current) {
-      const trackIdx = tracks.findIndex(t => t.id === focusTrackId);
-      if (trackIdx) {
-        listRef.current.scrollToItem(trackIdx, "center");
-      }
-    }
-  }, [focusTrackId, tracks]);
+  
+  useFocusReactWindowItem(listRef, currentTrackIndex);
 
   // Render an invisible version of the BeforeList element
   // in order to measure its height and render the right virtualized list
-  return beforeListHight < 0 ? (
+  return !isPreContentMeasured ? (
     <div className="opacity-0 border" ref={beforeListRef}>
       <BeforeList numTracks={tracks.length} />
     </div>
@@ -149,19 +64,7 @@ export function Tracks({
     <div className="flex h-full justify-center relative">
       {!filterText && (
         <div className="absolute border-blue-500 right-0 bottom-0 mb-5 mr-5 z-10">
-          <button
-            onClick={() => onRandomClick()}
-            className={cx(
-              "bg-indigo-600 hover:bg-indigo-700 text-white font-semibold",
-              "py-3 px-12",
-              "rounded-full",
-              "shadow-md",
-              "flex items-center"
-            )}
-          >
-            <ShuffleIcon className="fill-current w-5 h-5" />
-            <span className="ml-2">Play Random</span>
-          </button>
+          <ShuffleButton onClick={onRandomClick} />
         </div>
       )}
       {tracks.length > 0 && (

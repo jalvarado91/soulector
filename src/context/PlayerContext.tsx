@@ -1,8 +1,6 @@
 import React, { useReducer } from "react";
 
-export type PlayerContextControllerProps = {
-  children: React.ReactNode;
-};
+// Actions
 
 type ACTION_PLAY = {
   type: "PLAYER_PLAY";
@@ -28,7 +26,12 @@ const PlayerContextDispatcher = React.createContext<PlayerDispatcher>(
   (null as unknown) as PlayerDispatcher
 );
 
-function reduceState(state: PlayerState, action: PlayerContextAction) {
+// Reducer
+
+function reduceState(
+  state: PlayerState,
+  action: PlayerContextAction
+): PlayerState {
   let { currentTrackId, playing } = state;
 
   switch (action.type) {
@@ -44,17 +47,16 @@ function reduceState(state: PlayerState, action: PlayerContextAction) {
   };
 }
 
+// Context Controller
+
+export type PlayerContextControllerProps = {
+  children: React.ReactNode;
+};
+
 function PlayerContextController(props: PlayerContextControllerProps) {
   const { children } = props;
 
-  const reducer = (
-    state: PlayerState,
-    action: PlayerContextAction
-  ): PlayerState => {
-    return reduceState(state, action);
-  };
-
-  const [state, dispatch] = useReducer<typeof reducer>(reducer, {
+  const [state, dispatch] = useReducer<typeof reduceState>(reduceState, {
     currentTrackId: undefined,
     playing: false
   });

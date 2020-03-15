@@ -6,9 +6,9 @@ import { Helmet } from "react-helmet";
 
 export function PlayerContainer() {
   const { currentTrackId, playing } = useContext(PlayerContextState);
-  const { tracks, loading } = useContext(TracksStateContext);
+  const { tracks, tracksById, loading } = useContext(TracksStateContext);
 
-  const currentTrack = tracks.find(tr => tr._id === currentTrackId);
+  const currentTrack = currentTrackId ? tracksById[currentTrackId] : null;
 
   return (
     <React.Fragment>
