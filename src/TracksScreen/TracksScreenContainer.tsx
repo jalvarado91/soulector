@@ -1,9 +1,14 @@
 import React from "react";
-import { PlayerContextController } from "../context/PlayerContext";
+import { PlayerContextController } from "./PlayerContextController";
+import { TracksContextController } from "./TracksContextController";
 
 type Props = {
   children: React.ReactElement;
 };
 export function TracksScreenContainer({ children }: Props) {
-  return <PlayerContextController>{children}</PlayerContextController>;
+  return (
+    <TracksContextController>
+      <PlayerContextController>{children}</PlayerContextController>
+    </TracksContextController>
+  );
 }

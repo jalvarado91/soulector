@@ -5,15 +5,14 @@ import React, {
   useState,
   useLayoutEffect
 } from "react";
-import { ITrack } from "../types";
 import { Track } from "./Track";
-import { TracksStateContext, TrackModel } from "../context/TracksContext";
+import { TracksStateContext, TrackModel } from "../TracksScreen/TracksContextController";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import {
   PlayerContextState,
   PlayerContextDispatcher
-} from "../context/PlayerContext";
+} from "../TracksScreen/PlayerContextController";
 import { cx } from "emotion";
 import { ShuffleIcon, Soulector } from "./Icons";
 import { sample } from "lodash-es";

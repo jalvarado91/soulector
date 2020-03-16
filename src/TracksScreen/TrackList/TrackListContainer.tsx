@@ -2,18 +2,18 @@ import React, { useContext } from "react";
 import {
   PlayerContextState,
   PlayerContextDispatcher
-} from "../../context/PlayerContext";
+} from "../PlayerContextController";
 import {
   TracksStateContext,
   TracksContextController
-} from "../../context/TracksContext";
+} from "../TracksContextController";
 import { sample } from "lodash-es";
 
 export type TrackListContainerProps = {
   children: React.ReactNode;
 };
 export function TrackListContainer({ children }: TrackListContainerProps) {
-  return <TracksContextController>{children}</TracksContextController>;
+  return <>{children}</>;
 }
 
 export function useTrackListContainer(filterText: string) {

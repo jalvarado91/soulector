@@ -1,7 +1,7 @@
 import React, { useRef, useState, useLayoutEffect } from "react";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
-import { TrackModel } from "../../context/TracksContext";
+import { TrackModel } from "../TracksContextController";
 import { Track } from "../../components/Track";
 import { ShuffleButton } from "../../components/ShuffleButton";
 import useFocusReactWindowItem from "./useFocusReactWindowItem";

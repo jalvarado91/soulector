@@ -2,7 +2,7 @@ import React from "react";
 import { cx } from "emotion";
 import { formatDate, formatTimeSecs } from "../helpers";
 import { SpeakerIcon } from "./Icons";
-import { TrackModel } from "../context/TracksContext";
+import { TrackModel } from "../TracksScreen/TracksContextController";
 
 export type TrackProps = {
   track: TrackModel;

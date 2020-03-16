@@ -1,18 +1,15 @@
-import React, { useContext } from "react";
-import { PlayerContextState } from "../TracksScreen/PlayerContextController";
-import { TracksStateContext } from "../TracksScreen/TracksContextController";
-import { EmbedPlayer } from "./EmbedPlayer";
+import React from "react";
 import { Helmet } from "react-helmet";
+import { withContainer } from "../../infra/withContainer";
+import { PlayerContainer, usePlayerContainer } from "./PlayerContainer";
+import { EmbedPlayer } from "../../components/EmbedPlayer";
 
-export function PlayerContainer() {
-  const { currentTrackId, playing } = useContext(PlayerContextState);
-  const { tracks, tracksById, loading } = useContext(TracksStateContext);
-
-  const currentTrack = currentTrackId ? tracksById[currentTrackId] : null;
+function Player() {
+  const { currentTrack, showPlayer } = usePlayerContainer();
 
   return (
     <React.Fragment>
-      {!loading && tracks.length > 0 && currentTrack && playing && (
+      {showPlayer && currentTrack && (
         <React.Fragment>
           <Helmet>
             <title>{currentTrack.name}</title>
@@ -33,3 +30,5 @@ export function PlayerContainer() {
     </React.Fragment>
   );
 }
+
+export default withContainer(Player, PlayerContainer);

@@ -39,7 +39,7 @@ function reduceState(
       currentTrackId = action.payload.trackId;
       playing = true;
   }
-
+  
   return {
     ...state,
     currentTrackId,

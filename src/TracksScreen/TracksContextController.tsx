@@ -1,29 +1,10 @@
 import React, { useEffect, useReducer } from "react";
-import { ITrack } from "../types";
 import { createApiClient, TrackDTO } from "../infra/apiClient";
+import { CollectionNormalized, normalize } from "../infra/collection-utils";
 
 const apiClient = createApiClient();
 
 export type TrackSource = "soundcloud" | "mixcloud";
-
-type BaseTrack = {
-  id: string;
-  duration: number;
-  created_time: string;
-  name: string;
-  url: string;
-  picture_large: string;
-};
-
-type SoundCloudTrack = {
-  key: number;
-  source: Extract<TrackSource, "soundcloud">;
-};
-
-type MixCloudTrack = {
-  key: string;
-  source: Extract<TrackSource, "mixcloud">;
-};
 
 export type TrackModel = {
   id: string;
@@ -76,24 +57,9 @@ type TracksContextAction =
   | ACTION_TRACKS_LOAD_SUCCESS
   | ACTION_TRACKS_LOAD_FAILURE;
 
-type CollectionNormed<T> = {
-  [key: string]: T;
-};
-
-function normalize<T>(
-  items: T[],
-  getId: (item: T) => string
-): CollectionNormed<T> {
-  const normed = {} as CollectionNormed<T>;
-  for (var i of items) {
-    normed[getId(i)] = i;
-  }
-  return normed;
-}
-
 type TracksContextState = {
   tracks: TrackModel[];
-  tracksById: CollectionNormed<TrackModel>;
+  tracksById: CollectionNormalized<TrackModel>;
   loading: boolean;
   tracksFetchKey: number;
 };
@@ -136,6 +102,7 @@ function reduceTrackState(
   return {
     ...state,
     tracks,
+    tracksById,
     loading,
     tracksFetchKey
   };

@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import TrackList from "./TrackList";
 import { withContainer } from "../infra/withContainer";
 import { TracksScreenContainer } from "./TracksScreenContainer";
+import Player from "./Player";
 
 type Props = {
   searchText: string;
@@ -19,12 +20,7 @@ function TracksScreen({ searchText, onSearchChange, onSearchClose }: Props) {
         onSearchClose={onSearchClose}
       />
       <TrackList filterText={searchText}>test</TrackList>
-      {/* <PlayerContextController>
-        <PlayerContainer />
-      </PlayerContextController> */}
-      <div className="w-full py-1 text-xs text-center text-orange-700 bg-orange-200">
-        Refactor Version
-      </div>
+      <Player />
     </div>
   );
 }

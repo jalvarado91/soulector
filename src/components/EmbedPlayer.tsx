@@ -1,12 +1,12 @@
 import React from "react";
-import { TrackModel } from "../context/TracksContext";
+import { TrackModel } from "../TracksScreen/TracksContextController";
 // import { ITrack } from "../types";
 
-export type PlayerProps = {
+type Props = {
   track: TrackModel;
 };
 
-export function Player(props: PlayerProps) {
+export function EmbedPlayer(props: Props) {
   const { track } = props;
 
   return track.source === "soundcloud" ? (
@@ -16,7 +16,7 @@ export function Player(props: PlayerProps) {
   );
 }
 
-export function SoundCloudWidgetPlayer(props: PlayerProps) {
+export function SoundCloudWidgetPlayer(props: Props) {
   const { track } = props;
   const trackKey = track.key;
 
@@ -33,7 +33,7 @@ export function SoundCloudWidgetPlayer(props: PlayerProps) {
   );
 }
 
-export function MixCloudWidgetPlayer(props: PlayerProps) {
+export function MixCloudWidgetPlayer(props: Props) {
   const { track } = props;
   const trackKey = track.key || "";
 
