@@ -15,14 +15,14 @@ type Props = {
 function TracksScreen({ searchText, onSearchChange, onSearchClose }: Props) {
   return (
     <div className="flex flex-col h-full text-gray-900">
-      {/* <Navbar
+      <Navbar
         searchText={searchText}
         onSearchChange={onSearchChange}
         onSearchClose={onSearchClose}
       />
       <TrackList filterText={searchText}>test</TrackList>
-      <Player /> */}
-      <TestComponent />
+      <Player />
+      {/* <TestComponent /> */}
     </div>
   );
 }
