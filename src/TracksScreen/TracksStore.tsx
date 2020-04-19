@@ -38,10 +38,15 @@ type TrackStore = {
   fetchTracks: () => Promise<void>;
 };
 
-const [useTracksStore] = create<TrackStore>(set => ({
+export const [useTracksStore] = create<TrackStore>((set, get) => ({
   tracks: {},
-
   fetchTracksState: "pending",
+  actions: {
+    find(predicate: (track: TrackModel) => boolean) {
+        const tracks = get().tracks
+        return tracks
+    } 
+  },
   fetchTracks: async () => {
     try {
       const trackDtos = await apiClient.getEpisodes();
@@ -60,23 +65,23 @@ const [useTracksStore] = create<TrackStore>(set => ({
   }
 }));
 
-type TrackViewStore = {
-  activate: (filterText: string) => Promise<void>;
-  activateState: "pending" | "resolved" | "rejected";
-  filteredTracks: TrackStore["tracks"];
-  rejectionReason?: string;
-};
-const [useTrackViewStore] = create<TrackViewStore>(set => {
-  const fetchTracks = useTracksStore(state => state.fetchTracks);
-  const tracks = useTracksStore(state => state.tracks);
+// type TrackViewStore = {
+//   activate: (filterText: string) => Promise<void>;
+//   activateState: "pending" | "resolved" | "rejected";
+//   filteredTracks: TrackStore["tracks"];
+//   rejectionReason?: string;
+// };
+// export const [useTrackViewStore] = create<TrackViewStore>(set => {
+//   const fetchTracks = useTracksStore(state => state.fetchTracks);
+//   const tracks = useTracksStore(state => state.tracks);
 
-  return {
-    activateState: "pending",
-    filteredTracks: tracks,
-    activate: async () => {
-      await fetchTracks()
-        .then(() => set({ activateState: "resolved" }))
-        .catch(err => set({ activateState: "rejected", rejectionReason: err }));
-    }
-  };
-});
+//   return {
+//     activateState: "pending",
+//     filteredTracks: tracks,
+//     activate: async () => {
+//       await fetchTracks()
+//         .then(() => set({ activateState: "resolved" }))
+//         .catch(err => set({ activateState: "rejected", rejectionReason: err }));
+//     }
+//   };
+// });
