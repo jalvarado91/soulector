@@ -1,7 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { withContainer } from "../../infra/withContainer";
-import { PlayerContainer, usePlayerContainer } from "./PlayerContainer";
+import { usePlayerContainer } from "./PlayerContainer";
 import { EmbedPlayer } from "../../components/EmbedPlayer";
 
 function Player() {
@@ -18,7 +17,7 @@ function Player() {
             className="bg-white p-3"
             style={{
               boxShadow:
-                "0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+                "0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
             }}
           >
             <div className="max-w-4xl m-auto">
@@ -31,4 +30,4 @@ function Player() {
   );
 }
 
-export default withContainer(Player, PlayerContainer);
+export default Player;

@@ -1,10 +1,10 @@
 import React, { useRef, useState, useLayoutEffect } from "react";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
-import { TrackModel } from "../TracksContextController";
 import { Track } from "../../components/Track";
 import { ShuffleButton } from "../../components/ShuffleButton";
 import useFocusReactWindowItem from "./useFocusReactWindowItem";
+import { TrackModel } from "../TracksStore";
 
 type BeforeListProps = {
   numTracks: number;
@@ -36,22 +36,22 @@ export function Tracks({
   currentTrackId,
   onRandomClick,
   focusTrackId,
-  filterText
+  filterText,
 }: TracksProps) {
   const listRef = useRef<List>(null);
 
   const beforeListRef = useRef<HTMLDivElement | null>(null);
   const [beforeListHight, setBeforeListHeight] = useState(-1);
   const isPreContentMeasured = beforeListHight > 0;
-  const currentTrackIndex = tracks.findIndex(t => t.id === focusTrackId);
-  
+  const currentTrackIndex = tracks.findIndex((t) => t.id === focusTrackId);
+
   useLayoutEffect(() => {
     if (beforeListRef.current) {
       const domHeight = beforeListRef.current.getBoundingClientRect().height;
       setBeforeListHeight(domHeight);
     }
   }, [beforeListHight]);
-  
+
   useFocusReactWindowItem(listRef, currentTrackIndex);
 
   // Render an invisible version of the BeforeList element
@@ -91,9 +91,9 @@ export function Tracks({
                       style={{
                         ...style,
                         ...(index !== 0 && {
-                          top: `${parseFloat(top) + beforeListHight}px`
+                          top: `${parseFloat(top) + beforeListHight}px`,
                         }),
-                        ...(index === 0 && { height: fHeight })
+                        ...(index === 0 && { height: fHeight }),
                       }}
                     >
                       <div className="max-w-4xl m-auto">

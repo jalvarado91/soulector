@@ -1,7 +1,6 @@
 import create from "zustand";
 import { createApiClient, TrackDTO } from "../infra/apiClient";
 import { CollectionNormalized, normalize } from "../infra/collection-utils";
-import { useCallback } from "react";
 
 const apiClient = createApiClient();
 
@@ -27,42 +26,41 @@ function trackMapper(dto: TrackDTO): TrackModel {
     name: dto.name,
     picture_large: dto.picture_large,
     source: dto.source === "SOUNDCLOUD" ? "soundcloud" : "mixcloud",
-    url: dto.url
+    url: dto.url,
   };
 }
 
 type TrackStore = {
-  tracks: CollectionNormalized<TrackModel>;
+  // tracks: CollectionNormalized<TrackModel>;
+  tracks: TrackModel[];
   fetchTracksState: "pending" | "resolved" | "rejected";
   rejectionReason?: string;
   fetchTracks: () => Promise<void>;
+  findById: (id: string) => TrackModel | undefined;
 };
 
 export const [useTracksStore] = create<TrackStore>((set, get) => ({
-  tracks: {},
+  tracks: [],
   fetchTracksState: "pending",
-  actions: {
-    find(predicate: (track: TrackModel) => boolean) {
-        const tracks = get().tracks
-        return tracks
-    } 
+  findById(id: string) {
+    return get().tracks.find((t) => t.id === id);
   },
   fetchTracks: async () => {
     try {
       const trackDtos = await apiClient.getEpisodes();
       const trackModels = trackDtos.map(trackMapper);
-      const normalized = normalize(trackModels, track => track.id);
+      // const normalized = normalize(trackModels, (track) => track.id);
       set({
-        tracks: normalized,
-        fetchTracksState: "resolved"
+        tracks: trackModels,
+        fetchTracksState: "resolved",
       });
     } catch (err) {
       set({
         fetchTracksState: "rejected",
-        rejectionReason: err
+        rejectionReason: err,
       });
     }
-  }
+  },
 }));
 
 // type TrackViewStore = {

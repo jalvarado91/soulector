@@ -2,7 +2,7 @@ import React from "react";
 import { cx } from "emotion";
 import { formatDate, formatTimeSecs } from "../helpers";
 import { SpeakerIcon } from "./Icons";
-import { TrackModel } from "../TracksScreen/TracksContextController";
+import { TrackModel } from "../TracksScreen/TracksStore";
 
 export type TrackProps = {
   track: TrackModel;
@@ -48,7 +48,7 @@ export function Track(props: TrackProps) {
           </div>
           <div
             className={cx("font-bold leading-tight", "md:text-lg", {
-              "text-indigo-600": playing
+              "text-indigo-600": playing,
             })}
           >
             {track.name}

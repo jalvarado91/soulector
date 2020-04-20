@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Navbar from "./Navbar";
 import TrackList from "./TrackList";
-import { withContainer } from "../infra/withContainer";
-import { TracksScreenContainer } from "./TracksScreenContainer";
 import Player from "./Player";
-import { createApiClient } from "../infra/apiClient";
 
 type Props = {
   searchText: string;
@@ -20,10 +17,9 @@ function TracksScreen({ searchText, onSearchChange, onSearchClose }: Props) {
         onSearchChange={onSearchChange}
         onSearchClose={onSearchClose}
       />
-      <TrackList filterText={searchText}>test</TrackList>
+      <TrackList filterText={searchText}></TrackList>
       <Player />
-      {/* <TestComponent /> */}
     </div>
   );
 }
-export default withContainer(TracksScreen, TracksScreenContainer);
+export default TracksScreen;

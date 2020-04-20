@@ -1,5 +1,5 @@
 import React from "react";
-import { TrackModel } from "../TracksScreen/TracksContextController";
+import { TrackModel } from "../TracksScreen/TracksStore";
 // import { ITrack } from "../types";
 
 type Props = {

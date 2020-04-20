@@ -1,5 +1,7 @@
 import create, { UseStore, StoreApi } from "zustand";
 import produce from "immer";
+import { TrackModel } from "../TracksScreen/TracksStore";
+import { Collection } from "react-virtualized";
 
 export interface IEntity {
   id: string;
@@ -35,7 +37,7 @@ interface IStore<T> {
   items: T[];
   actions: {
     findById: (id: string) => T | undefined;
-    add: (models: T | T[]) => T[];
+    add: (models: T | T[]) => void;
   };
 }
 
@@ -49,12 +51,21 @@ export function createCollection<T extends IEntity>(): [
       items: [],
       actions: {
         findById(id: string) {
-          return get().items.find(it => it.id === id);
+          return get().items.find((it) => it.id === id);
         },
         add(models: T | T[]) {
-          return get().items;
-        }
-      }
+          if (Array.isArray(models)) {
+            set({
+              ids: get().ids.concat(models.map((i) => i.id)),
+              items: get().items.concat(models),
+            });
+          } else {
+            set({
+              items: get().items.concat([models]),
+            });
+          }
+        },
+      },
     };
   });
 
