@@ -2,7 +2,7 @@ import { useTrackListContainer } from "./TrackListContainer";
 import React from "react";
 import TrackListSpinner from "./TrackListSpinner";
 import { Tracks } from "./Tracks";
-import { match } from "../../helpers";
+import { match } from "../../infra/match";
 
 type Props = {
   filterText?: string;
