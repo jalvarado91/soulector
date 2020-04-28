@@ -1,6 +1,5 @@
 import create from "zustand";
 import { createApiClient, TrackDTO } from "../infra/apiClient";
-import { CollectionNormalized, normalize } from "../infra/collection-utils";
 
 const apiClient = createApiClient();
 
@@ -31,7 +30,6 @@ function trackMapper(dto: TrackDTO): TrackModel {
 }
 
 type TrackStore = {
-  // tracks: CollectionNormalized<TrackModel>;
   tracks: TrackModel[];
   fetchTracksState: "pending" | "resolved" | "rejected";
   rejectionReason?: string;
@@ -49,7 +47,6 @@ export const [useTracksStore] = create<TrackStore>((set, get) => ({
     try {
       const trackDtos = await apiClient.getEpisodes();
       const trackModels = trackDtos.map(trackMapper);
-      // const normalized = normalize(trackModels, (track) => track.id);
       set({
         tracks: trackModels,
         fetchTracksState: "resolved",
@@ -62,24 +59,3 @@ export const [useTracksStore] = create<TrackStore>((set, get) => ({
     }
   },
 }));
-
-// type TrackViewStore = {
-//   activate: (filterText: string) => Promise<void>;
-//   activateState: "pending" | "resolved" | "rejected";
-//   filteredTracks: TrackStore["tracks"];
-//   rejectionReason?: string;
-// };
-// export const [useTrackViewStore] = create<TrackViewStore>(set => {
-//   const fetchTracks = useTracksStore(state => state.fetchTracks);
-//   const tracks = useTracksStore(state => state.tracks);
-
-//   return {
-//     activateState: "pending",
-//     filteredTracks: tracks,
-//     activate: async () => {
-//       await fetchTracks()
-//         .then(() => set({ activateState: "resolved" }))
-//         .catch(err => set({ activateState: "rejected", rejectionReason: err }));
-//     }
-//   };
-// });
