@@ -32,6 +32,75 @@ export function flatten<T extends IEntity>(
  * Collection
  */
 
+export type EntityId = number | string;
+export type IdSelector<T> = (model: T) => EntityId;
+export interface DictionaryNum<T> {
+  [id: number]: T | undefined;
+}
+export interface Dictionary<T> extends DictionaryNum<T> {
+  [id: string]: T | undefined;
+}
+
+export interface EntityStore<T> {
+  ids: EntityId[];
+  entities: Dictionary<T>;
+}
+
+export interface EntityDefinition<T> {
+  selectId: IdSelector<T>;
+}
+
+export interface StoreActions<T> {
+  addOne(entity: T): void;
+  addMany(entities: T[]): void;
+}
+
+interface Store<T> extends EntityStore<T> {
+  actions: StoreActions<T>;
+}
+
+export function createEntityStore<T extends IEntity>(): [
+  UseStore<Store<T>>,
+  StoreApi<Store<T>>
+] {
+  const [useStore, store] = create<Store<T>>((set, get) => {
+    return {
+      ids: [],
+      entities: {},
+      actions: {
+        addOne(entity: T) {
+          set({
+            ids: get().ids.concat(entity.id),
+            entities: {
+              [entity.id]: entity,
+              ...get().entities,
+            },
+          });
+        },
+        addMany(entities: T[]) {
+          let aggregates = {};
+          for (var en of entities) {
+            aggregates = {
+              [en.id]: en,
+              ...aggregates,
+            };
+          }
+
+          set({
+            ids: get().ids.concat(entities.map((e) => e.id)),
+            entities: {
+              ...aggregates,
+              ...get().entities,
+            },
+          });
+        },
+      },
+    };
+  });
+
+  return [useStore, store];
+}
+
 interface IStore<T> {
   ids: string[];
   items: T[];
