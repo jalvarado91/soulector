@@ -52,7 +52,6 @@
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "@tailwindcss/custom-forms": "^0.2.0",
     "@types/lodash-es": "^4.17.3",
-    "@types/react-redux": "^7.1.7",
     "@types/react-virtualized": "^9.21.4",
     "@types/react-virtualized-auto-sizer": "^1.0.0",
     "@types/react-window": "^1.8.1",
