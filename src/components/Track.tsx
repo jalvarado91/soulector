@@ -2,15 +2,16 @@ import React from "react";
 import { cx } from "emotion";
 import { formatDate, formatTimeSecs } from "../helpers";
 import { SpeakerIcon } from "./Icons";
-import { ITrack } from "../types";
+import { TrackModel } from "../TracksScreen/TracksStore";
 
 export type TrackProps = {
-  track: ITrack;
+  track: TrackModel;
   playing?: boolean;
 } & React.HTMLAttributes<HTMLButtonElement>;
 
 export function Track(props: TrackProps) {
   const { track, playing = false, onClick } = props;
+
   return (
     <button
       onClick={onClick}
@@ -23,7 +24,7 @@ export function Track(props: TrackProps) {
       <div className="flex items-center justify-start text-left">
         <div className="flex-shrink-0 h-16 w-16 rounded-lg overflow-hidden relative">
           <img
-            className="w-full h-full"
+            className="w-full h-full bg-gray-200"
             src={track.picture_large}
             alt={track.name}
           />
@@ -47,7 +48,7 @@ export function Track(props: TrackProps) {
           </div>
           <div
             className={cx("font-bold leading-tight", "md:text-lg", {
-              "text-indigo-600": playing
+              "text-indigo-600": playing,
             })}
           >
             {track.name}

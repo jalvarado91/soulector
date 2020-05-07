@@ -12,6 +12,7 @@
     "date-fns": "^2.0.1",
     "dotenv-webpack": "^1.7.0",
     "emotion": "^10.0.14",
+    "immer": "^6.0.3",
     "lodash": "^4.17.15",
     "lodash-es": "^4.17.15",
     "mongodb": "^3.3.0-beta2",
@@ -21,7 +22,8 @@
     "react-scripts": "^3.0.1",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
-    "typescript": "^3.5.0"
+    "typescript": "^3.5.0",
+    "zustand": "^2.2.3"
   },
   "scripts": {
     "start": "run-p start:css start:cra",
