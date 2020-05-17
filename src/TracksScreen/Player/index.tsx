@@ -14,6 +14,7 @@ import { usePlayerStore, PlayerStore } from "../PlayerStore";
 import { sample } from "lodash-es";
 import { cx } from "emotion";
 import shallow from "zustand/shallow";
+import { ProgressBar } from "../../components/ProgressBar";
 
 function Player() {
   const playerSelectors = (state: PlayerStore) => ({
@@ -173,10 +174,18 @@ function PlayerControls({
                   <div className="text-xs">
                     {formatTime(Math.ceil(playProgress))}
                   </div>
-                  <ProgressBar
-                    progress={Math.floor(playProgress)}
-                    total={trackDuration}
-                  />
+                  <div className="w-full px-2 relative flex flex-col justify-center">
+                    <ProgressBar
+                      onChange={(progressTarget) =>
+                        setCuePosition(progressTarget)
+                      }
+                      onSeek={(progressTarget) =>
+                        setCuePosition(progressTarget)
+                      }
+                      progress={Math.floor(playProgress)}
+                      duration={trackDuration}
+                    />
+                  </div>
                   <div className="text-xs">
                     {formatTime(Math.ceil(trackDuration))}
                   </div>
@@ -212,28 +221,3 @@ function PlayerControls({
 }
 
 export default Player;
-
-export interface ProgressBarProps {
-  progress: number;
-  total: number;
-}
-function ProgressBar(props: ProgressBarProps) {
-  const { progress = 0, total = 0 } = props;
-
-  const percent = Math.ceil((progress / total) * 100);
-  const progressW = `${percent}%`;
-
-  return (
-    <div className="w-full relative flex flex-col justify-center">
-      <div className="absolute left-0 block w-full h-2 rounded-full bg-gray-300" />
-      <div
-        style={{ width: progressW }}
-        className="absolute left-0 block h-2 rounded-full bg-indigo-600"
-      />
-      {/* <div
-        style={{ left: progressW }}
-        className="absolute block w-4 h-4 bg-indigo-600 rounded-full right-0"
-      /> */}
-    </div>
-  );
-}
