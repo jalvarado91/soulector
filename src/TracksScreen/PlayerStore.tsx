@@ -2,10 +2,12 @@ import create from "zustand";
 
 type PlayerStatus = "idle" | "playing";
 
-type PlayerStore = {
+export type PlayerStore = {
   playing: boolean;
   currentTrackId?: string;
   play: (trackId: string) => void;
+  pause: () => void;
+  resume: () => void;
 };
 
 export const [usePlayerStore] = create<PlayerStore>((set, get) => ({
@@ -15,6 +17,16 @@ export const [usePlayerStore] = create<PlayerStore>((set, get) => ({
     set({
       playing: true,
       currentTrackId: trackId,
+    });
+  },
+  pause() {
+    set({
+      playing: false,
+    });
+  },
+  resume() {
+    set({
+      playing: true,
     });
   },
 }));

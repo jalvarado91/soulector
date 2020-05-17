@@ -1,4 +1,4 @@
-import { ShuffleIcon } from "./Icons";
+import { IconShuffle } from "./Icons";
 import React from "react";
 import { cx } from "emotion";
 
@@ -19,7 +19,7 @@ export function ShuffleButton({ onClick, className }: Props) {
         className
       )}
     >
-      <ShuffleIcon className="fill-current w-5 h-5" />
+      <IconShuffle className="fill-current w-5 h-5" />
       <span className="ml-2">Play Random</span>
     </button>
   );

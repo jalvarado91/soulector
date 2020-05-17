@@ -1,7 +1,7 @@
 import React from "react";
 import { cx } from "emotion";
 import { formatDate, formatTimeSecs } from "../helpers";
-import { SpeakerIcon } from "./Icons";
+import { IconSpeaker } from "./Icons";
 import { TrackModel } from "../TracksScreen/TracksStore";
 
 export type TrackProps = {
@@ -32,7 +32,7 @@ export function Track(props: TrackProps) {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="absolute inset-0 bg-indigo-600 opacity-75" />
               <div className="relative leading-none p-1 bg-white group-hover:bg-white rounded-full text-indigo-600 hover:bg-gray-200 hover:shadow-sm">
-                <SpeakerIcon className="relative block group-hover:hidden fill-current w-6 h-6" />
+                <IconSpeaker className="relative block group-hover:hidden fill-current w-6 h-6" />
                 {/* <PauseIcon className="fill-current w-6 h-6" /> */}
               </div>
             </div>
