@@ -16,6 +16,7 @@ export function ShuffleButton({ onClick, className }: Props) {
         "rounded-full",
         "shadow-md",
         "flex items-center",
+        "focus:outline-none",
         className
       )}
     >

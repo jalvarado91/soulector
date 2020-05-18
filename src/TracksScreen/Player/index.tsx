@@ -55,13 +55,6 @@ function Player() {
   const showPlayer =
     fetchTracksState !== "pending" && tracks.length > 0 && currentTrack;
 
-  useEffect(() => {
-    if (fetchTracksState === "resolved") {
-      const track = sample(tracks);
-      track && play(track.id);
-    }
-  }, [fetchTracksState]);
-
   return (
     <React.Fragment>
       {showPlayer && currentTrack && (
@@ -153,10 +146,10 @@ function PlayerControls({
               />
             </div>
             <div className="flex flex-col justify-center">
-              <div className="text-lg font-bold leading-tight">
+              <div className="text-md font-bold leading-tight">
                 {track.name}
               </div>
-              <div className="text-gray-700">
+              <div className="text-gray-700 text-md">
                 {formatDate(track.created_time)}
               </div>
             </div>
@@ -241,7 +234,7 @@ function PlayerControls({
                 target="_blank"
                 href={track.url}
               >
-                <IconSoundcloud className="fill-current w-8 h-8" />
+                <IconSoundcloud className="fill-current w-6 h-6" />
               </a>
               <div className="flex space-x-1 items-center">
                 <button
@@ -249,7 +242,7 @@ function PlayerControls({
                     muted ? onUnmute() : onMute();
                   }}
                 >
-                  <IconSpeaker className="fill-current w-8 h-8" />
+                  <IconSpeaker className="fill-current w-6 h-6" />
                 </button>
                 <div className="w-40 pr-4">
                   <ProgressBar
