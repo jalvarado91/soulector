@@ -9,6 +9,10 @@ import {
   IconPause,
   IconPlay,
   IconFastForward,
+  IconBackThirty,
+  IconSkipThirty,
+  IconSoundcloud,
+  IconSpeaker,
 } from "../../components/Icons";
 import { usePlayerStore, PlayerStore } from "../PlayerStore";
 import { sample } from "lodash-es";
@@ -23,12 +27,25 @@ function Player() {
     play: state.play,
     resume: state.resume,
     pause: state.pause,
+    volume: state.volume,
+    setVolume: state.setVolume,
+    muted: state.muted,
+    mute: state.mute,
+    unmute: state.unmute,
   });
 
-  const { currentTrackId, playing, play, resume, pause } = usePlayerStore(
-    playerSelectors,
-    shallow
-  );
+  const {
+    currentTrackId,
+    playing,
+    play,
+    resume,
+    pause,
+    volume,
+    setVolume,
+    mute,
+    muted,
+    unmute,
+  } = usePlayerStore(playerSelectors, shallow);
 
   const tracks = useTracksStore((state) => state.tracks);
   const fetchTracksState = useTracksStore((state) => state.fetchTracksState);
@@ -66,10 +83,15 @@ function Player() {
             )}
             {currentTrack.source === "soundcloud" && (
               <PlayerControls
+                volume={volume}
+                onVolumeChange={setVolume}
                 onPause={pause}
                 onResume={resume}
                 track={currentTrack}
                 playing={playing}
+                muted={muted}
+                onMute={mute}
+                onUnmute={unmute}
               />
             )}
           </div>
@@ -82,8 +104,13 @@ function Player() {
 type PlayerControlsProps = {
   track: TrackModel;
   playing: boolean;
+  volume: number;
+  onVolumeChange: (vol: number) => void;
   onResume: () => void;
   onPause: () => void;
+  muted: boolean;
+  onMute: () => void;
+  onUnmute: () => void;
 };
 
 function PlayerControls({
@@ -91,6 +118,11 @@ function PlayerControls({
   playing,
   onPause,
   onResume,
+  volume,
+  onVolumeChange,
+  muted,
+  onMute,
+  onUnmute,
 }: PlayerControlsProps) {
   const [debug, setDebug] = useState(false);
 
@@ -113,7 +145,7 @@ function PlayerControls({
       {playerReady && (
         <div className="gap-5 grid grid-cols-3 xl:grid-cols-10">
           <div className="xl:col-span-2 flex items-center space-x-3 ">
-            <div className="flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden relative">
+            <div className="flex-shrink-0 h-16 w-16 rounded-lg overflow-hidden relative">
               <img
                 className="w-full h-full bg-gray-200"
                 src={track.picture_large}
@@ -121,8 +153,10 @@ function PlayerControls({
               />
             </div>
             <div className="flex flex-col justify-center">
-              <div className="font-bold leading-tight">{track.name}</div>
-              <div className="text-xs md:text-sm text-gray-700">
+              <div className="text-lg font-bold leading-tight">
+                {track.name}
+              </div>
+              <div className="text-gray-700">
                 {formatDate(track.created_time)}
               </div>
             </div>
@@ -131,41 +165,43 @@ function PlayerControls({
           <div className="flex flex-col items-center justify-center xl:col-span-6 space-y-2">
             <div className="flex items-center justify-center space-x-4">
               <button
+                title="Rewind 30 seconds"
                 onClick={() => setCuePosition(playProgress - 30 * 1000)}
                 className={cx(
                   "bg-transparent rounded-full text-gray-700 p-2",
                   "transition-all duration-200 ease-in-out",
                   "hover:text-gray-900",
-                  "focus:outline-none focus:shadow-outline"
+                  "focus:outline-none focus:bg-gray-200"
                 )}
               >
-                <IconFastBackward className="fill-current h-6 w-6" />
+                <IconBackThirty className="fill-current h-8 w-8" />
               </button>
               <button
                 onClick={() => (playing ? onPause() : onResume())}
                 className={cx(
-                  "p-2 rounded-full bg-indigo-600 border shadow-md text-white",
+                  "p-2 rounded-full bg-indigo-600 border shadow-md text-white leading-none",
                   "transition-all duration-200 ease-in-out",
                   "hover:bg-indigo-700 hover:shadow-lg",
                   "focus:outline-none focus:bg-indigo-700"
                 )}
               >
                 {playing ? (
-                  <IconPause className="fill-current w-6 h-6 inline-block" />
+                  <IconPause className="fill-current w-8 h-8 inline-block" />
                 ) : (
-                  <IconPlay className="fill-current w-6 h-6 inline-block" />
+                  <IconPlay className="fill-current w-8 h-8 inline-block" />
                 )}
               </button>
               <button
+                title="Forward 30 seconds"
                 onClick={() => setCuePosition(playProgress + 30 * 1000)}
                 className={cx(
                   "bg-transparent rounded-full text-gray-700 p-2",
                   "transition-all duration-200 ease-in-out",
                   "hover:text-gray-900",
-                  "focus:outline-none focus:shadow-outline"
+                  "focus:outline-none focus:bg-gray-200"
                 )}
               >
-                <IconFastForward className="fill-current h-6 w-6" />
+                <IconSkipThirty className="fill-current h-8 w-8" />
               </button>
             </div>
             <div className="max-w-3xl w-full">
@@ -195,15 +231,36 @@ function PlayerControls({
           </div>
           {/*  */}
           <div className="xl:col-span-2 flex items-center space-x-2 justify-end">
-            <span>Volume</span>
-            <button
-              className="text-xs py-1 px-2 text-bold bg-gray-500 rounded-lg text-white"
-              onClick={() => {
-                setDebug((d) => !d);
-              }}
-            >
-              Toggle Debug
-            </button>
+            <div className="flex space-x-2 items-center">
+              <a
+                className={cx(
+                  "inline-block p-1",
+                  "transition-all duration-200 ease-in-out",
+                  "hover:text-orange-600"
+                )}
+                target="_blank"
+                href={track.url}
+              >
+                <IconSoundcloud className="fill-current w-8 h-8" />
+              </a>
+              <div className="flex space-x-1 items-center">
+                <button
+                  onClick={() => {
+                    muted ? onUnmute() : onMute();
+                  }}
+                >
+                  <IconSpeaker className="fill-current w-8 h-8" />
+                </button>
+                <div className="w-40 pr-4">
+                  <ProgressBar
+                    duration={100}
+                    progress={volume}
+                    onChange={(vol) => onVolumeChange(Math.floor(vol))}
+                    onSeek={(vol) => onVolumeChange(Math.floor(vol))}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -214,6 +271,7 @@ function PlayerControls({
         track={track}
         position={cuePosition}
         playing={playing}
+        volume={volume}
         onPlayProgressChange={setPlayProgress}
       />
     </React.Fragment>

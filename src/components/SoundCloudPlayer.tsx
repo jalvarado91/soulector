@@ -33,6 +33,7 @@ export function SoundCloudPlayer(props: SoundCloudPlayerWidgetProps) {
 export interface SoundCloudPlayerWidgetProps {
   playing?: boolean;
   position?: number;
+  volume?: number;
   onReady?: (trackDuration: number) => void;
   onPlayProgressChange?: (position: number) => void;
   onPause?: () => void;
@@ -52,6 +53,7 @@ export function SoundCloudPlayerWidget(props: SoundCloudPlayerWidgetProps) {
     track,
     onPause,
     onPlay,
+    volume = 80,
     showNative,
   } = props;
 
@@ -68,7 +70,6 @@ export function SoundCloudPlayerWidget(props: SoundCloudPlayerWidgetProps) {
       widgetRef.current.bind(window.SC.Widget.Events.READY, () => {
         // return track duration when ready
         widgetRef.current.getCurrentSound((currentSound: any) => {
-          console.log("READY", currentSound);
           onReady && onReady(currentSound.full_duration);
           setReady(true);
         });
@@ -107,6 +108,12 @@ export function SoundCloudPlayerWidget(props: SoundCloudPlayerWidgetProps) {
       widgetRef.current.seekTo(props.position || 0);
     }
   }, [props.position, track, ready]);
+
+  useEffect(() => {
+    if (widgetRef.current && ready) {
+      widgetRef.current.setVolume(volume);
+    }
+  }, [volume, track, ready]);
 
   useEffect(() => {
     if (widgetRef.current && ready) {
