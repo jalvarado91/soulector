@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { EmbedPlayer } from "../../components/EmbedPlayer";
 import { SoundCloudPlayer } from "../../components/SoundCloudPlayer";
 import { TrackModel, useTracksStore } from "../TracksStore";
 import { formatDate, formatTime } from "../../helpers";
 import {
-  IconFastBackward,
   IconPause,
   IconPlay,
-  IconFastForward,
   IconBackThirty,
   IconSkipThirty,
   IconSoundcloud,
@@ -20,10 +18,9 @@ import {
   playerStoreSelectors,
 } from "../PlayerStore";
 import { Slider } from "@reach/slider";
-import { sample } from "lodash-es";
 import { cx } from "emotion";
 import shallow from "zustand/shallow";
-import { ProgressBar } from "../../components/ProgressBar";
+import { useMedia } from "../../infra/useMedia";
 
 function Player() {
   const playerSelectors = (state: PlayerStore) => ({
@@ -42,7 +39,6 @@ function Player() {
   const {
     currentTrackId,
     playing,
-    play,
     resume,
     pause,
     volume,
@@ -68,7 +64,7 @@ function Player() {
             <title>{currentTrack.name}</title>
           </Helmet>
           <div
-            className="bg-white p-3"
+            className="bg-white px-3 pt-3 pb-1"
             style={{
               boxShadow:
                 "0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
@@ -124,24 +120,47 @@ function PlayerControls({
 }: PlayerControlsProps) {
   const [debug, setDebug] = useState(false);
 
+  const isMed = useMedia("(min-width: 768px)");
+
+  const lastSeekPos = useRef(0);
   const [playProgress, setPlayProgress] = useState(0);
+  const [playerProgress, setPlayerProgress] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
   const [cuePosition, setCuePosition] = useState<number>(0);
   const [trackDuration, setTrackDuration] = useState(0);
+  const [seeking, setSeeking] = useState(false);
 
   function onPlayerReady(trackDuration: number) {
     setPlayerReady(true);
     setTrackDuration(trackDuration);
+    setPlayerProgress(0);
+  }
+
+  // TODO: Remove when mobile player done
+  const useEmbed = useMemo(() => {
+    return debug || !isMed;
+  }, [isMed, debug]);
+
+  function onAudioProgress(progress: number) {
+    if (!seeking) {
+      setPlayerProgress(progress);
+      setPlayProgress(progress);
+    }
   }
 
   useEffect(() => {
+    setPlayerProgress(0);
     setCuePosition(0);
   }, [track]);
 
   return (
     <React.Fragment>
       {playerReady && (
-        <div className="gap-5 grid grid-cols-3 xl:grid-cols-10">
+        <div
+          className={cx("gap-5 grid grid-cols-3 xl:grid-cols-10", {
+            "hidden": useEmbed,
+          })}
+        >
           <div className="xl:col-span-2 flex items-center space-x-3 ">
             <div className="flex-shrink-0 h-16 w-16 rounded-lg overflow-hidden relative">
               <img
@@ -159,8 +178,8 @@ function PlayerControls({
               </div>
             </div>
           </div>
-          {/*  */}
-          <div className="flex flex-col items-center justify-center xl:col-span-6 space-y-2">
+          {/* Player */}
+          <div className="flex flex-col items-center justify-center xl:col-span-6 space-y-1">
             <div className="flex items-center justify-center space-x-4">
               <button
                 title="Rewind 30 seconds"
@@ -204,59 +223,63 @@ function PlayerControls({
             </div>
             <div className="max-w-3xl w-full">
               <>
-                <div className="flex justify-center items-center space-x-2">
-                  <div className="text-xs">
-                    {formatTime(Math.ceil(playProgress))}
+                <div className="flex justify-center items-center">
+                  <div className="text-xs w-10 text-right">
+                    {formatTime(Math.ceil(playerProgress))}
                   </div>
-                  <div className="w-full px-2 relative flex flex-col justify-center">
-                    <ProgressBar
-                      onChange={(progressTarget) =>
-                        setCuePosition(progressTarget)
-                      }
-                      onSeek={(progressTarget) =>
-                        setCuePosition(progressTarget)
-                      }
-                      progress={Math.floor(playProgress)}
-                      duration={trackDuration}
+                  <div className="flex flex-1 flex-col justify-center max-w-xl mx-3 relative w-full">
+                    <Slider
+                      max={trackDuration}
+                      value={playerProgress}
+                      onMouseDown={() => setSeeking(true)}
+                      onChange={(newVal) => {
+                        setPlayerProgress(newVal);
+                        lastSeekPos.current = newVal;
+                      }}
+                      onMouseUp={() => {
+                        setSeeking(false);
+                        setCuePosition(lastSeekPos.current);
+                      }}
                     />
                   </div>
-                  <div className="text-xs">
+                  <div className="text-xs w-10">
                     {formatTime(Math.ceil(trackDuration))}
                   </div>
                 </div>
               </>
             </div>
           </div>
-          {/*  */}
+          {/* Volume */}
           <div className="xl:col-span-2 flex items-center space-x-2 justify-end">
-            <div className="flex space-x-2 items-center">
+            <div className="flex space-x-1 items-center">
               <a
                 className={cx(
-                  "inline-block p-1",
+                  "inline-block p-2 rounded-full",
                   "transition-all duration-200 ease-in-out",
-                  "hover:text-orange-600"
+                  "hover:bg-gray-200 "
                 )}
+                title="Open in SoundCloud"
                 target="_blank"
                 href={track.url}
               >
-                <IconSoundcloud className="fill-current w-6 h-6" />
+                <IconSoundcloud className="fill-current w-5 h-5" />
               </a>
               <div className="flex space-x-1 items-center">
                 <button
+                  className={cx(
+                    "inline-block p-1 rounded-full",
+                    "transition-all duration-200 ease-in-out",
+                    "hover:bg-gray-200",
+                    "focus:outline-none"
+                  )}
+                  title={muted ? "Unmute" : "Mute"}
                   onClick={() => {
                     muted ? onUnmute() : onMute();
                   }}
                 >
-                  <IconSpeaker className="fill-current w-6 h-6" />
+                  <IconSpeaker className="fill-current w-5 h-5" />
                 </button>
                 <div className="w-40 pr-4">
-                  {/* {volume} */}
-                  {/* <ProgressBar
-                    duration={100}
-                    progress={volume}
-                    onChange={(vol) => onVolumeChange(Math.floor(vol))}
-                    onSeek={(vol) => onVolumeChange(Math.floor(vol))}
-                  /> */}
                   <Slider
                     min={0}
                     max={100}
@@ -272,12 +295,12 @@ function PlayerControls({
       <SoundCloudPlayer
         key={track.id}
         onReady={onPlayerReady}
-        showNative={debug}
+        showNative={useEmbed}
         track={track}
         position={cuePosition}
         playing={playing}
         volume={volume}
-        onPlayProgressChange={setPlayProgress}
+        onPlayProgressChange={onAudioProgress}
       />
     </React.Fragment>
   );
