@@ -14,6 +14,7 @@ import {
   IconSoundcloud,
   IconSpeaker,
 } from "../../components/Icons";
+import { Slider } from "@reach/slider";
 import { usePlayerStore, PlayerStore } from "../PlayerStore";
 import { sample } from "lodash-es";
 import { cx } from "emotion";
@@ -245,11 +246,18 @@ function PlayerControls({
                   <IconSpeaker className="fill-current w-6 h-6" />
                 </button>
                 <div className="w-40 pr-4">
-                  <ProgressBar
+                  {/* {volume} */}
+                  {/* <ProgressBar
                     duration={100}
                     progress={volume}
                     onChange={(vol) => onVolumeChange(Math.floor(vol))}
                     onSeek={(vol) => onVolumeChange(Math.floor(vol))}
+                  /> */}
+                  <Slider
+                    min={0}
+                    max={100}
+                    value={volume}
+                    onChange={(val) => onVolumeChange(val)}
                   />
                 </div>
               </div>

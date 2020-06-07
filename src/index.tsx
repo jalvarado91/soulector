@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "@reach/slider/styles.css";
 import "./index.css";
 
 const render = () => {
@@ -7,7 +8,6 @@ const render = () => {
 
   ReactDOM.render(<App />, document.getElementById("root"));
 };
-
 
 render();
 

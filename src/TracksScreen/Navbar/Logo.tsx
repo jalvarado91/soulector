@@ -5,7 +5,7 @@ export default function Logo() {
   return (
     <React.Fragment>
       <Soulector className="w-8 h-8 mr-2" />
-      <div className="text-2xl font-bold">Soulector</div>
+      <div className="text-2xl font-bold">Soulection</div>
     </React.Fragment>
   );
 }

@@ -59,4 +59,53 @@ html,
   animation-delay: -1.3s;
 }
 
+[data-reach-slider] {
+  @apply cursor-pointer;
+}
+[data-reach-slider]:focus,
+[data-reach-slider]:active {
+  @apply outline-none;
+}
+[data-reach-slider][data-disabled] {
+}
+[data-reach-slider][data-orientation="(horizontal|vertical)"] {
+}
+
+[data-reach-slider-track] {
+  @apply bg-gray-300;
+}
+[data-reach-slider-track-highlight] {
+  @apply bg-gray-500;
+}
+[data-reach-slider-track-highlight][data-disabled] {
+}
+[data-reach-slider-track-highlight][data-orientation="(horizontal|vertical)"] {
+}
+
+[data-reach-slider-marker] {
+}
+[data-reach-slider-marker][data-disabled] {
+}
+[data-reach-slider-marker][data-orientation="(horizontal|vertical)"] {
+}
+[data-reach-slider-marker][data-state="(under|at|over)-value"] {
+  /* marker is under, at, or over the slider value */
+}
+[data-reach-slider-marker][data-value="VALUE_REF"] {
+  /* marker is under, at, or over the slider value */
+}
+
+[data-reach-slider-handle] {
+  @apply border shadow border-gray-200 outline-none opacity-0;
+}
+
+[data-reach-slider-handle][aria-disabled] {
+}
+[data-reach-slider-handle][aria-orientation="(horizontal|vertical)"] {
+}
+
+[data-reach-slider]:hover [data-reach-slider-handle] {
+  @apply opacity-100 bg-indigo-600 border-indigo-600;
+}
+
 @tailwind utilities;
