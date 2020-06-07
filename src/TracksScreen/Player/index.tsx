@@ -14,8 +14,12 @@ import {
   IconSoundcloud,
   IconSpeaker,
 } from "../../components/Icons";
+import {
+  usePlayerStore,
+  PlayerStore,
+  playerStoreSelectors,
+} from "../PlayerStore";
 import { Slider } from "@reach/slider";
-import { usePlayerStore, PlayerStore } from "../PlayerStore";
 import { sample } from "lodash-es";
 import { cx } from "emotion";
 import shallow from "zustand/shallow";
@@ -30,7 +34,7 @@ function Player() {
     pause: state.pause,
     volume: state.volume,
     setVolume: state.setVolume,
-    muted: state.muted,
+    muted: playerStoreSelectors.muted(state),
     mute: state.mute,
     unmute: state.unmute,
   });

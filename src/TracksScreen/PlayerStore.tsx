@@ -10,7 +10,7 @@ export type PlayerStore = {
   pause: () => void;
   resume: () => void;
   setVolume: (vol: number) => void;
-  muted: boolean;
+  // muted: boolean;
   mute: () => void;
   unmute: () => void;
   lastVol: number;
@@ -18,7 +18,7 @@ export type PlayerStore = {
 
 export const [usePlayerStore] = create<PlayerStore>((set, get) => ({
   playing: false,
-  muted: false,
+  // muted: false,
   currentTrackId: undefined,
   volume: 80,
   lastVol: 80,
@@ -47,14 +47,31 @@ export const [usePlayerStore] = create<PlayerStore>((set, get) => ({
     set({
       lastVol: get().volume,
       volume: 0,
-      muted: true,
+      // muted: true,
     });
   },
   unmute() {
     set({
       lastVol: 80,
       volume: get().lastVol,
-      muted: false,
+      // muted: false,
     });
   },
 }));
+
+export type PlayerStoreSelectors = typeof playerStoreSelectors;
+
+export const playerStoreSelectors = {
+  muted: (state: PlayerStore) => state.volume <= 0,
+  playerState: (state: PlayerStore) => {
+    if (!state.playing && state.currentTrackId) {
+      return "paused";
+    }
+
+    if (!state.playing && !state.currentTrackId) {
+      return "idle";
+    }
+
+    return "playing";
+  },
+};
