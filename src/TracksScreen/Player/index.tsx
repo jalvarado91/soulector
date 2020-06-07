@@ -118,7 +118,7 @@ function PlayerControls({
   onMute,
   onUnmute,
 }: PlayerControlsProps) {
-  const [debug, setDebug] = useState(false);
+  const [debug] = useState(false);
 
   const isMed = useMedia("(min-width: 768px)");
 
@@ -158,7 +158,7 @@ function PlayerControls({
       {playerReady && (
         <div
           className={cx("gap-5 grid grid-cols-3 xl:grid-cols-10", {
-            "hidden": useEmbed,
+            hidden: useEmbed,
           })}
         >
           <div className="xl:col-span-2 flex items-center space-x-3 ">
