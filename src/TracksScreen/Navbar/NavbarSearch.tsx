@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { SearchIcon, TimesIcon } from "../../components/Icons";
+import { IconSearch, IconTimes } from "../../components/Icons";
 import Logo from "./Logo";
 
 type Props = {
@@ -25,7 +25,7 @@ export default function NavbarSearch({
       <div className="mx-full md:max-w-xl w-full ml-auto">
         <div className="flex flex-grow items-center relative">
           <div className="text-gray-500 absolute pl-4">
-            <SearchIcon className="fill-current w-6 h-6"></SearchIcon>
+            <IconSearch className="fill-current w-6 h-6"></IconSearch>
           </div>
           <input
             ref={searchRef}
@@ -40,7 +40,7 @@ export default function NavbarSearch({
               className="p-2 text-gray-700 hover:bg-gray-400 hover:text-gray-600 hover:shadow-sm rounded-lg focus:outline-none"
               onClick={() => onCloseClick()}
             >
-              <TimesIcon className="fill-current w-3 h-3"></TimesIcon>
+              <IconTimes className="fill-current w-3 h-3"></IconTimes>
             </button>
           </div>
         </div>

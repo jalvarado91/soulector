@@ -1,6 +1,6 @@
 import Logo from "./Logo";
 import React, { useState, useEffect } from "react";
-import { SearchIcon } from "../../components/Icons";
+import { IconSearch } from "../../components/Icons";
 import NavbarSearch from "../Navbar/NavbarSearch";
 import { cx } from "emotion";
 
@@ -60,7 +60,7 @@ function SearchButton({ onClick }: SearchButtonProps) {
       className="p-2 hover:bg-gray-200 rounded-full focus:outline-none"
       onClick={() => onClick()}
     >
-      <SearchIcon className="fill-current w-6 h-6"></SearchIcon>
+      <IconSearch className="fill-current w-6 h-6"></IconSearch>
     </button>
   );
 }

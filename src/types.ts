@@ -8,3 +8,10 @@ export type ITrack = {
   url: string;
   picture_large: string;
 };
+
+
+declare global {
+  interface Window {
+    SC: any;
+  }
+}
