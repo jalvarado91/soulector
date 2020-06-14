@@ -1,4 +1,5 @@
 import create from "zustand";
+import { clamp } from "../helpers";
 
 type PlayerStatus = "idle" | "playing";
 
@@ -10,15 +11,16 @@ export type PlayerStore = {
   pause: () => void;
   resume: () => void;
   setVolume: (vol: number) => void;
-  // muted: boolean;
+  volumeUp: () => void;
+  volumeDown: () => void;
   mute: () => void;
   unmute: () => void;
+  toggleMute: () => void;
   lastVol: number;
 };
 
 export const [usePlayerStore] = create<PlayerStore>((set, get) => ({
   playing: false,
-  // muted: false,
   currentTrackId: undefined,
   volume: 80,
   lastVol: 80,
@@ -40,22 +42,38 @@ export const [usePlayerStore] = create<PlayerStore>((set, get) => ({
   },
   setVolume(vol: number) {
     set({
-      volume: vol,
+      volume: clamp(vol, 0, 100),
+    });
+  },
+  volumeUp() {
+    set({
+      volume: get().volume + 10,
+    });
+  },
+  volumeDown() {
+    set({
+      volume: get().volume - 10,
     });
   },
   mute() {
     set({
       lastVol: get().volume,
       volume: 0,
-      // muted: true,
     });
   },
   unmute() {
     set({
       lastVol: 80,
       volume: get().lastVol,
-      // muted: false,
     });
+  },
+  toggleMute() {
+    const muted = playerStoreSelectors.muted(get());
+    if (muted) {
+      get().unmute();
+    } else {
+      get().mute();
+    }
   },
 }));
 

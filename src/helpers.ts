@@ -25,3 +25,7 @@ export function formatDate(dateString: string) {
   var date = new Date(dateString);
   return format(date, "MMMM do yyyy");
 }
+
+export function clamp(num: number, min: number, max: number) {
+  return Math.min(Math.max(num, min), max);
+}

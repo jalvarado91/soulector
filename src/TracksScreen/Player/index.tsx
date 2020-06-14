@@ -21,6 +21,7 @@ import { Slider } from "@reach/slider";
 import { cx } from "emotion";
 import shallow from "zustand/shallow";
 import { useMedia } from "../../infra/useMedia";
+import { HotKeys } from "react-hotkeys";
 
 function Player() {
   const playerSelectors = (state: PlayerStore) => ({

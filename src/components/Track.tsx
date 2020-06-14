@@ -7,13 +7,13 @@ import { TrackModel } from "../TracksScreen/TracksStore";
 export type TrackProps = {
   track: TrackModel;
   playing?: boolean;
-} & React.HTMLAttributes<HTMLButtonElement>;
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export function Track(props: TrackProps) {
   const { track, playing = false, onClick } = props;
 
   return (
-    <button
+    <div
       onClick={onClick}
       className={cx(
         "flex flex-column items-center justify-between text-left cursor-pointer w-full p-3 rounded-lg border border-transparent",
@@ -58,6 +58,6 @@ export function Track(props: TrackProps) {
       <div className="hidden md:block">
         <span>{formatTimeSecs(track.duration)}</span>
       </div>
-    </button>
+    </div>
   );
 }
