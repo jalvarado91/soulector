@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { IconSearch, IconTimes } from "../../components/Icons";
-import Logo from "./Logo";
 import { KEYS } from "../../helpers";
 
 type Props = {

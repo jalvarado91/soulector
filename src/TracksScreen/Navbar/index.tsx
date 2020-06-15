@@ -1,5 +1,5 @@
 import Logo from "./Logo";
-import React, { useState, useEffect, createContext } from "react";
+import React, { useEffect } from "react";
 import { IconSearch } from "../../components/Icons";
 import NavbarSearch from "../Navbar/NavbarSearch";
 import { cx } from "emotion";
