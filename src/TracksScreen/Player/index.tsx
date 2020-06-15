@@ -21,7 +21,6 @@ import { Slider } from "@reach/slider";
 import { cx } from "emotion";
 import shallow from "zustand/shallow";
 import { useMedia } from "../../infra/useMedia";
-import { HotKeys } from "react-hotkeys";
 
 function Player() {
   const playerSelectors = (state: PlayerStore) => ({
@@ -35,6 +34,12 @@ function Player() {
     muted: playerStoreSelectors.muted(state),
     mute: state.mute,
     unmute: state.unmute,
+    progress: state.progress,
+    setProgress: state.setProgress,
+    cuePosition: state.cuePosition,
+    setCuePosition: state.setCuePosition,
+    forward: state.forward,
+    rewind: state.rewind,
   });
 
   const {
@@ -47,6 +52,12 @@ function Player() {
     mute,
     muted,
     unmute,
+    progress,
+    setProgress,
+    cuePosition,
+    setCuePosition,
+    forward,
+    rewind,
   } = usePlayerStore(playerSelectors, shallow);
 
   const tracks = useTracksStore((state) => state.tracks);
@@ -87,6 +98,12 @@ function Player() {
                 muted={muted}
                 onMute={mute}
                 onUnmute={unmute}
+                progress={progress}
+                onProgressChange={setProgress}
+                cuePosition={cuePosition}
+                onCuePositionChange={setCuePosition}
+                onForward={forward}
+                onRewind={rewind}
               />
             )}
           </div>
@@ -106,6 +123,12 @@ type PlayerControlsProps = {
   muted: boolean;
   onMute: () => void;
   onUnmute: () => void;
+  progress: number;
+  onProgressChange: (progress: number) => void;
+  cuePosition: number;
+  onCuePositionChange: (cuePos: number) => void;
+  onForward: (secs: number) => void;
+  onRewind: (secs: number) => void;
 };
 
 function PlayerControls({
@@ -118,16 +141,20 @@ function PlayerControls({
   muted,
   onMute,
   onUnmute,
+  progress,
+  onProgressChange,
+  cuePosition,
+  onCuePositionChange,
+  onForward,
+  onRewind,
 }: PlayerControlsProps) {
   const [debug] = useState(false);
 
   const isMed = useMedia("(min-width: 768px)");
 
   const lastSeekPos = useRef(0);
-  const [playProgress, setPlayProgress] = useState(0);
   const [playerProgress, setPlayerProgress] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
-  const [cuePosition, setCuePosition] = useState<number>(0);
   const [trackDuration, setTrackDuration] = useState(0);
   const [seeking, setSeeking] = useState(false);
 
@@ -145,13 +172,13 @@ function PlayerControls({
   function onAudioProgress(progress: number) {
     if (!seeking) {
       setPlayerProgress(progress);
-      setPlayProgress(progress);
+      onProgressChange(progress);
     }
   }
 
   useEffect(() => {
     setPlayerProgress(0);
-    setCuePosition(0);
+    onCuePositionChange(0);
   }, [track]);
 
   return (
@@ -184,7 +211,7 @@ function PlayerControls({
             <div className="flex items-center justify-center space-x-4">
               <button
                 title="Rewind 30 seconds"
-                onClick={() => setCuePosition(playProgress - 30 * 1000)}
+                onClick={() => onRewind(30)}
                 className={cx(
                   "bg-transparent rounded-full text-gray-700 p-2",
                   "transition-all duration-200 ease-in-out",
@@ -211,7 +238,7 @@ function PlayerControls({
               </button>
               <button
                 title="Forward 30 seconds"
-                onClick={() => setCuePosition(playProgress + 30 * 1000)}
+                onClick={() => onForward(30)}
                 className={cx(
                   "bg-transparent rounded-full text-gray-700 p-2",
                   "transition-all duration-200 ease-in-out",
@@ -239,7 +266,7 @@ function PlayerControls({
                       }}
                       onMouseUp={() => {
                         setSeeking(false);
-                        setCuePosition(lastSeekPos.current);
+                        onCuePositionChange(lastSeekPos.current);
                       }}
                     />
                   </div>
