@@ -26,19 +26,12 @@ export type KeyboarActionsMap = {
 
 export function useShortcutHandlers() {
   const playerSelectors = (state: PlayerStore) => ({
-    currentTrackId: state.currentTrackId,
     playing: state.playing,
-    play: state.play,
     resume: state.resume,
     pause: state.pause,
-    volume: state.volume,
-    setVolume: state.setVolume,
     volumeUp: state.volumeUp,
     volumeDown: state.volumeDown,
     toggleMute: state.toggleMute,
-    muted: playerStoreSelectors.muted(state),
-    mute: state.mute,
-    unmute: state.unmute,
     forward: state.forward,
     rewind: state.rewind,
   });
