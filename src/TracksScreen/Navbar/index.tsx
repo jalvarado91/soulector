@@ -1,8 +1,29 @@
 import Logo from "./Logo";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { IconSearch } from "../../components/Icons";
 import NavbarSearch from "../Navbar/NavbarSearch";
 import { cx } from "emotion";
+import create from "zustand";
+
+export type NavbarStore = {
+  searchOpen: boolean;
+  openSearch: () => void;
+  closeSearch: () => void;
+};
+
+export const [useNavbarStore] = create<NavbarStore>((set, get) => ({
+  searchOpen: false,
+  openSearch() {
+    set({
+      searchOpen: true,
+    });
+  },
+  closeSearch() {
+    set({
+      searchOpen: false,
+    });
+  },
+}));
 
 type Props = {
   searchText: string;
@@ -13,13 +34,11 @@ type Props = {
 export default function Navbar({
   searchText,
   onSearchChange,
-  onSearchClose
+  onSearchClose,
 }: Props) {
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  function onClose() {
-    setSearchOpen(false);
-  }
+  const searchOpen = useNavbarStore((state) => state.searchOpen);
+  const openSearch = useNavbarStore((state) => state.openSearch);
+  const closeSearch = useNavbarStore((state) => state.closeSearch);
 
   useEffect(() => {
     if (!searchOpen) {
@@ -39,11 +58,11 @@ export default function Navbar({
           {searchOpen ? (
             <NavbarSearch
               searchText={searchText}
-              onCloseClick={onClose}
+              onCloseClick={closeSearch}
               onSearchChange={onSearchChange}
             />
           ) : (
-            <SearchButton onClick={() => setSearchOpen(true)} />
+            <SearchButton onClick={openSearch} />
           )}
         </div>
       </React.Fragment>

@@ -1,4 +1,5 @@
 import create from "zustand";
+import { clamp } from "../helpers";
 
 type PlayerStatus = "idle" | "playing";
 
@@ -6,22 +7,33 @@ export type PlayerStore = {
   playing: boolean;
   volume: number;
   currentTrackId?: string;
+  progress: number;
+  trackDuration: number;
+  cuePosition: number;
   play: (trackId: string) => void;
   pause: () => void;
   resume: () => void;
+  setProgress: (progress: number) => void;
   setVolume: (vol: number) => void;
-  // muted: boolean;
+  volumeUp: () => void;
+  volumeDown: () => void;
   mute: () => void;
   unmute: () => void;
+  toggleMute: () => void;
+  setCuePosition: (cuePos: number) => void;
+  forward: (secs: number) => void;
+  rewind: (secs: number) => void;
   lastVol: number;
 };
 
 export const [usePlayerStore] = create<PlayerStore>((set, get) => ({
   playing: false,
-  // muted: false,
   currentTrackId: undefined,
   volume: 80,
   lastVol: 80,
+  progress: 0,
+  trackDuration: 0,
+  cuePosition: 0,
   play(trackId: string) {
     set({
       playing: true,
@@ -38,24 +50,61 @@ export const [usePlayerStore] = create<PlayerStore>((set, get) => ({
       playing: true,
     });
   },
+  setProgress(progress: number) {
+    set({
+      progress: progress,
+    });
+  },
+  setTrackDuration(duration: number) {
+    set({
+      trackDuration: duration,
+    });
+  },
+  setCuePosition(cuePos: number) {
+    set({
+      cuePosition: cuePos,
+    });
+  },
+  forward(secs: number) {
+    set({
+      cuePosition: get().progress + secs * 1000,
+    });
+  },
+  rewind(secs: number) {
+    set({
+      cuePosition: get().progress - secs * 1000,
+    });
+  },
   setVolume(vol: number) {
     set({
-      volume: vol,
+      volume: clamp(vol, 0, 100),
     });
+  },
+  volumeUp() {
+    get().setVolume(get().volume + 10);
+  },
+  volumeDown() {
+    get().setVolume(get().volume - 10);
   },
   mute() {
     set({
       lastVol: get().volume,
       volume: 0,
-      // muted: true,
     });
   },
   unmute() {
     set({
       lastVol: 80,
       volume: get().lastVol,
-      // muted: false,
     });
+  },
+  toggleMute() {
+    const muted = playerStoreSelectors.muted(get());
+    if (muted) {
+      get().unmute();
+    } else {
+      get().mute();
+    }
   },
 }));
 

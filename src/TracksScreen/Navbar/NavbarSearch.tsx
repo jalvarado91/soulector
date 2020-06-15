@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { IconSearch, IconTimes } from "../../components/Icons";
-import Logo from "./Logo";
+import { KEYS } from "../../helpers";
 
 type Props = {
   searchText: string;
@@ -10,7 +10,7 @@ type Props = {
 export default function NavbarSearch({
   searchText,
   onSearchChange,
-  onCloseClick
+  onCloseClick,
 }: Props) {
   let searchRef = useRef<HTMLInputElement>(null);
 
@@ -19,6 +19,13 @@ export default function NavbarSearch({
       searchRef.current.focus();
     }
   }, [searchRef.current]);
+
+  function handleKeydown(event: React.KeyboardEvent) {
+    if (event.key === KEYS.ESCAPE) {
+      event.nativeEvent.stopImmediatePropagation();
+      onCloseClick();
+    }
+  }
 
   return (
     <React.Fragment>
@@ -29,8 +36,9 @@ export default function NavbarSearch({
           </div>
           <input
             ref={searchRef}
+            onKeyDown={handleKeydown}
             value={searchText}
-            onChange={e => onSearchChange(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
             type="text"
             className="w-full py-2 pl-12 pl-3 rounded-lg bg-gray-200 text-gray-900 outline-none focus:bg-gray-300 focus:border-gray-400"
             placeholder="Search for episodes..."
