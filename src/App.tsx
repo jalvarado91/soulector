@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./index.css";
 import TracksScreen from "./TracksScreen";
-import { useShortcutHandlers } from "./useKeybardHandlers";
+import { useShortcutHandlers } from "./useKeyboardHandlers";
 
 export default function App() {
   const [searchText, setSearchText] = useState("");
