@@ -47,7 +47,7 @@ export function Track(props: TrackProps) {
             </span>
           </div>
           <div
-            className={cx("font-bold leading-tight", "md:text-lg", {
+            className={cx("font-semibold leading-tight", "md:text-lg", {
               "text-indigo-600": playing,
             })}
           >
