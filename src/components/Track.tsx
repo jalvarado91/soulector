@@ -16,9 +16,9 @@ export function Track(props: TrackProps) {
     <div
       onClick={onClick}
       className={cx(
-        "flex flex-column items-center justify-between text-left cursor-pointer w-full p-3 rounded-lg border border-transparent",
-        "hover:shadow-lg hover:border hover:border-gray-200",
-        "focus:outline-none focus:bg-gray-100 focus:border focus:border-gray-200"
+        "flex flex-column items-center justify-between text-left cursor-pointer w-full p-3 rounded border border-transparent",
+        "hover:bg-gray-100 border-1 hover:border hover:border-gray-200",
+        "focus:outline-none focus:bg-gray-200 focus:border focus:border-gray-200"
       )}
     >
       <div className="flex items-center justify-start text-left">
@@ -38,7 +38,7 @@ export function Track(props: TrackProps) {
             </div>
           )}
         </div>
-        <div className="ml-2 md:flex md:flex-col md:flex-col-reverse">
+        <div className="ml-2 md:flex md:flex-col-reverse">
           <div className="text-sm md:text-base text-gray-700">
             <span>{formatDate(track.created_time)}</span>
             <span className="mx-1 inline-block md:hidden">&bull;</span>

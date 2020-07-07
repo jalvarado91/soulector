@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useLayoutEffect,
+} from "react";
 import { Helmet } from "react-helmet";
 import { EmbedPlayer } from "../../components/EmbedPlayer";
 import { SoundCloudPlayer } from "../../components/SoundCloudPlayer";
@@ -21,6 +27,7 @@ import { Slider } from "@reach/slider";
 import { cx } from "emotion";
 import shallow from "zustand/shallow";
 import { useMedia } from "../../infra/useMedia";
+import Marquee from "react-double-marquee";
 
 function Player() {
   const playerSelectors = (state: PlayerStore) => ({
@@ -150,7 +157,8 @@ function PlayerControls({
 }: PlayerControlsProps) {
   const [debug] = useState(false);
 
-  const isMed = useMedia("(min-width: 768px)");
+  const isAtLeastMidScreenSize = useMedia("(min-width: 768px)");
+  const isMoreThanMidScreenSize = !isAtLeastMidScreenSize;
 
   const lastSeekPos = useRef(0);
 
@@ -169,8 +177,8 @@ function PlayerControls({
 
   // TODO: Remove when mobile player done
   const useEmbed = useMemo(() => {
-    return debug || !isMed;
-  }, [isMed, debug]);
+    return debug;
+  }, [debug]);
 
   function onAudioProgress(progress: number) {
     if (!seeking) {
@@ -192,7 +200,7 @@ function PlayerControls({
             className={cx(
               "gap-5 grid grid-cols-3 xl:grid-cols-10 px-3 pt-3 pb-3",
               {
-                hidden: useEmbed,
+                hidden: isMoreThanMidScreenSize,
               }
             )}
           >
@@ -324,7 +332,7 @@ function PlayerControls({
               </div>
             </div>
           </div>
-          {useEmbed && (
+          <div className={cx(isAtLeastMidScreenSize && "hidden")}>
             <MobilePlayer
               playing={playing}
               track={track}
@@ -334,13 +342,13 @@ function PlayerControls({
               trackDuration={trackDuration}
               playerProgress={playerProgress}
             />
-          )}
+          </div>
         </>
       )}
       <SoundCloudPlayer
         key={track.id}
         onReady={onPlayerReady}
-        showNative={false}
+        showNative={useEmbed}
         track={track}
         position={cuePosition}
         playing={playing}
@@ -352,6 +360,63 @@ function PlayerControls({
 }
 
 export default Player;
+
+type MarqeeContainerProps = {
+  children: string;
+};
+function MarqeeContainer({ children }: MarqeeContainerProps) {
+  const debug = false;
+  const [speed, setSpeed] = useState(0.03);
+  const mRef = useRef<HTMLDivElement | null>(null);
+
+  const textLen = children.length;
+  const approxTextSize = useMemo(() => textLen * 10, [textLen]); // Chars * em
+
+  const w = useMemo(() => {
+    if (mRef.current && !isMeasured) {
+      return mRef.current.getBoundingClientRect().width;
+    }
+    return -1;
+  }, [mRef.current && mRef.current.getBoundingClientRect().width]);
+
+  const isMeasured = w > 0;
+  const shouldShowMarquee = approxTextSize > w;
+
+  return (
+    <div ref={mRef} className={cx([debug && "bg-blue-300"])}>
+      {!isMeasured ? (
+        <span className="text-white">.</span>
+      ) : (
+        <div
+          className={`relative whitespace-no-wrap ${
+            !debug && "overflow-hidden"
+          }`}
+          style={{
+            width: w,
+          }}
+          onMouseEnter={() => setSpeed(0)}
+          onMouseLeave={() => setSpeed(0.03)}
+        >
+          {shouldShowMarquee ? (
+            <>
+              <Marquee speed={speed} childMargin={24} direction="left">
+                {children}
+              </Marquee>
+              <div
+                className="absolute block h-full right-0 top-0 w-full z-10"
+                style={{
+                  boxShadow: "-24px 0px 15px -15px white inset",
+                }}
+              ></div>
+            </>
+          ) : (
+            <span>{children}</span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 type MobilePlayerProps = {
   track: TrackModel;
@@ -383,8 +448,8 @@ function MobilePlayer({
           style={{ width: `${progressPercent}%` }}
         ></div>
       </div>
-      <div className="px-3 py-3 flex space-x-2 justify-between">
-        <div className="flex space-x-2 items-center">
+      <div className="px-3 py-2 flex space-x-2 justify-between">
+        <div className="flex space-x-2 items-center w-full">
           <div className="flex-shrink-0 h-12 w-12 rounded overflow-hidden relative">
             <img
               className="w-full h-full bg-gray-200"
@@ -392,8 +457,10 @@ function MobilePlayer({
               alt={track.name}
             />
           </div>
-          <div className="flex flex-col justify-center">
-            <div className="font-semibold leading-tight">{track.name}</div>
+          <div className="flex flex-col justify-center w-full">
+            <div className="font-semibold leading-tight">
+              <MarqeeContainer>{track.name}</MarqeeContainer>
+            </div>
             <div className="text-gray-700 text-sm">
               {formatDate(track.created_time)}
             </div>
