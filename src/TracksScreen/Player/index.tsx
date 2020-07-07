@@ -373,6 +373,7 @@ function MarqeeContainer({ children }: MarqeeContainerProps) {
       return mRef.current.getBoundingClientRect().width;
     }
     return -1;
+    // eslint-disable-next-line
   }, [potentialW]);
 
   const isMeasured = w > 0;
