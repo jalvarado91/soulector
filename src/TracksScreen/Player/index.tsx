@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-  useLayoutEffect,
-} from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { EmbedPlayer } from "../../components/EmbedPlayer";
 import { SoundCloudPlayer } from "../../components/SoundCloudPlayer";
@@ -190,7 +184,7 @@ function PlayerControls({
   useEffect(() => {
     setPlayerProgress(0);
     onCuePositionChange(0);
-  }, [track]);
+  }, [track, setPlayerProgress, onCuePositionChange]);
 
   return (
     <React.Fragment>
@@ -301,6 +295,7 @@ function PlayerControls({
                   )}
                   title="Open in SoundCloud"
                   target="_blank"
+                  rel="noopener noreferrer"
                   href={track.url}
                 >
                   <IconSoundcloud className="fill-current w-5 h-5" />
@@ -372,12 +367,13 @@ function MarqeeContainer({ children }: MarqeeContainerProps) {
   const textLen = children.length;
   const approxTextSize = useMemo(() => textLen * 10, [textLen]); // Chars * em
 
+  const potentialW = mRef.current && mRef.current.getBoundingClientRect().width;
   const w = useMemo(() => {
     if (mRef.current && !isMeasured) {
       return mRef.current.getBoundingClientRect().width;
     }
     return -1;
-  }, [mRef.current && mRef.current.getBoundingClientRect().width]);
+  }, [potentialW]);
 
   const isMeasured = w > 0;
   const shouldShowMarquee = approxTextSize > w;
