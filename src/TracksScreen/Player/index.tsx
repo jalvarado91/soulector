@@ -22,6 +22,7 @@ import { cx } from "emotion";
 import shallow from "zustand/shallow";
 import { useMedia } from "../../infra/useMedia";
 import Marquee from "react-double-marquee";
+import AutoSizer from "react-virtualized-auto-sizer";
 
 function Player() {
   const playerSelectors = (state: PlayerStore) => ({
@@ -362,55 +363,50 @@ type MarqeeContainerProps = {
 function MarqeeContainer({ children }: MarqeeContainerProps) {
   const debug = false;
   const [speed, setSpeed] = useState(0.03);
-  const mRef = useRef<HTMLDivElement | null>(null);
 
+  const EM_SIZE = 10;
   const textLen = children.length;
-  const approxTextSize = useMemo(() => textLen * 10, [textLen]); // Chars * em
-
-  const potentialW = mRef.current && mRef.current.getBoundingClientRect().width;
-  const w = useMemo(() => {
-    if (mRef.current && !isMeasured) {
-      return mRef.current.getBoundingClientRect().width;
-    }
-    return -1;
-    // eslint-disable-next-line
-  }, [potentialW]);
-
-  const isMeasured = w > 0;
-  const shouldShowMarquee = approxTextSize > w;
+  const approxTextSize = useMemo(() => textLen * EM_SIZE, [textLen]);
 
   return (
-    <div ref={mRef} className={cx([debug && "bg-blue-300"])}>
-      {!isMeasured ? (
-        <span className="text-white">.</span>
-      ) : (
-        <div
-          className={`relative whitespace-no-wrap ${
-            !debug && "overflow-hidden"
-          }`}
-          style={{
-            width: w,
-          }}
-          onMouseEnter={() => setSpeed(0)}
-          onMouseLeave={() => setSpeed(0.03)}
-        >
-          {shouldShowMarquee ? (
-            <>
-              <Marquee speed={speed} childMargin={24} direction="left">
-                {children}
-              </Marquee>
+    <div className="w-full h-5">
+      <AutoSizer>
+        {({ width, height }) => {
+          return (
+            <div
+              style={{ width, height }}
+              className={cx([debug && "bg-blue-300"])}
+            >
               <div
-                className="absolute block h-full right-0 top-0 w-full z-10"
+                className={`relative whitespace-no-wrap ${
+                  !debug && "overflow-hidden"
+                }`}
                 style={{
-                  boxShadow: "-24px 0px 15px -15px white inset",
+                  width: width,
                 }}
-              ></div>
-            </>
-          ) : (
-            <span>{children}</span>
-          )}
-        </div>
-      )}
+                onMouseEnter={() => setSpeed(0)}
+                onMouseLeave={() => setSpeed(0.03)}
+              >
+                {approxTextSize > width ? (
+                  <>
+                    <Marquee speed={speed} childMargin={24} direction="left">
+                      {children}
+                    </Marquee>
+                    <div
+                      className="absolute block h-full right-0 top-0 w-full z-10"
+                      style={{
+                        boxShadow: "-24px 0px 15px -15px white inset",
+                      }}
+                    ></div>
+                  </>
+                ) : (
+                  <span>{children}</span>
+                )}
+              </div>
+            </div>
+          );
+        }}
+      </AutoSizer>
     </div>
   );
 }
@@ -445,7 +441,7 @@ function MobilePlayer({
           style={{ width: `${progressPercent}%` }}
         ></div>
       </div>
-      <div className="px-3 py-2 flex space-x-2 justify-between">
+      <div className="flex justify-between pb-2 pt-3 px-3 space-x-2">
         <div className="flex space-x-2 items-center w-full">
           <div className="flex-shrink-0 h-12 w-12 rounded overflow-hidden relative">
             <img
