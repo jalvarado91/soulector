@@ -51,8 +51,6 @@ export function SoundCloudPlayerWidget(props: SoundCloudPlayerWidgetProps) {
     onPlayProgressChange,
     onReady,
     track,
-    onPause,
-    onPlay,
     volume = 80,
     showNative,
   } = props;

@@ -1,8 +1,4 @@
-import {
-  PlayerStore,
-  playerStoreSelectors,
-  usePlayerStore,
-} from "./TracksScreen/PlayerStore";
+import { PlayerStore, usePlayerStore } from "./TracksScreen/PlayerStore";
 import shallow from "zustand/shallow";
 import { useEffect, useMemo } from "react";
 import {

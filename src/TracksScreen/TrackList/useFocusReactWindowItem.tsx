@@ -9,5 +9,5 @@ export default function useFocusReactWindowItem(
     if (listRef.current) {
       listRef.current.scrollToItem(index, "center");
     }
-  }, [index]);
+  }, [index, listRef]);
 }
