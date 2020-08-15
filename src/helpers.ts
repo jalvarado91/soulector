@@ -119,6 +119,16 @@ export const KEYS = {
   Z_KEY_CODE: 90,
   G_KEY_CODE: 71,
   M_KEY_CODE: 77,
+  ZERO_KEY: "0",
+  ONE_KEY: "1",
+  TWO_KEY: "2",
+  THREE_KEY: "3",
+  FOUR_KEY: "4",
+  FIVE_KEY: "5",
+  SIX_KEY: "6",
+  SEVEN_KEY: "7",
+  EIGHT_KEY: "8",
+  NINE_KEY: "9",
 } as const;
 
 export type Key = keyof typeof KEYS;
