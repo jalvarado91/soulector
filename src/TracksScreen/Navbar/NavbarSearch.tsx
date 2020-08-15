@@ -18,7 +18,7 @@ export default function NavbarSearch({
     if (searchRef.current) {
       searchRef.current.focus();
     }
-  }, [searchRef.current]);
+  }, []);
 
   function handleKeydown(event: React.KeyboardEvent) {
     if (event.key === KEYS.ESCAPE) {

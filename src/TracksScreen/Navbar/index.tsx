@@ -44,7 +44,7 @@ export default function Navbar({
     if (!searchOpen) {
       onSearchClose();
     }
-  }, [searchOpen]);
+  }, [searchOpen, onSearchClose]);
 
   return (
     <div className="px-4 py-3 shadow-md flex items-center">
