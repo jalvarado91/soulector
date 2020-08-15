@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { sample } from "lodash-es";
 import { useTracksStore } from "../TracksStore";
 import shallow from "zustand/shallow";
@@ -17,7 +17,7 @@ export function useTrackListContainer(filterText: string) {
 
   useEffect(() => {
     fetchTracks();
-  }, []);
+  }, [fetchTracks]);
 
   function onTrackClick(trackId: string) {
     play(trackId);

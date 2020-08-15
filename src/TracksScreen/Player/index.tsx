@@ -179,7 +179,7 @@ function PlayerControls({
   useEffect(() => {
     setPlayerProgress(0);
     onCuePositionChange(0);
-  }, [track]);
+  }, [track, onCuePositionChange]);
 
   return (
     <React.Fragment>
@@ -288,6 +288,7 @@ function PlayerControls({
                 )}
                 title="Open in SoundCloud"
                 target="_blank"
+                rel="noopener noreferrer"
                 href={track.url}
               >
                 <IconSoundcloud className="fill-current w-5 h-5" />
