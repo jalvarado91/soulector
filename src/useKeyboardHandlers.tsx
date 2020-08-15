@@ -30,6 +30,9 @@ export function useShortcutHandlers() {
     toggleMute: state.toggleMute,
     forward: state.forward,
     rewind: state.rewind,
+    setProgress: state.setProgress,
+    trackDuration: state.trackDuration,
+    setCuePosition: state.setCuePosition,
   });
 
   const {
@@ -41,6 +44,9 @@ export function useShortcutHandlers() {
     toggleMute,
     forward,
     rewind,
+    setProgress,
+    trackDuration,
+    setCuePosition,
   } = usePlayerStore(playerSelectors, shallow);
 
   const openSearch = useNavbarStore((state) => state.openSearch);
@@ -91,6 +97,86 @@ export function useShortcutHandlers() {
         return event[KEYS.CTRL_OR_CMD] && event.keyCode === KEYS.F_KEY_CODE;
       },
       perform: openSearch,
+    },
+    ZERO_PERCENT: {
+      keyTest: (event: globalThis.KeyboardEvent) => {
+        return event.key === KEYS.ZERO_KEY;
+      },
+      perform: () => {
+        setCuePosition(0);
+      },
+    },
+    TEN_PERCENT: {
+      keyTest: (event: globalThis.KeyboardEvent) => {
+        return event.key === KEYS.ONE_KEY;
+      },
+      perform: () => {
+        setCuePosition(trackDuration * 0.1);
+      },
+    },
+    TWENTY_PERCENT: {
+      keyTest: (event: globalThis.KeyboardEvent) => {
+        return event.key === KEYS.TWO_KEY;
+      },
+      perform: () => {
+        setCuePosition(trackDuration * 0.2);
+      },
+    },
+    THIRTY_PERCENT: {
+      keyTest: (event: globalThis.KeyboardEvent) => {
+        return event.key === KEYS.THREE_KEY;
+      },
+      perform: () => {
+        setCuePosition(trackDuration * 0.3);
+      },
+    },
+    FOURTY_PERCENT: {
+      keyTest: (event: globalThis.KeyboardEvent) => {
+        return event.key === KEYS.FOUR_KEY;
+      },
+      perform: () => {
+        setCuePosition(trackDuration * 0.4);
+      },
+    },
+    FIFTY_PERCENT: {
+      keyTest: (event: globalThis.KeyboardEvent) => {
+        return event.key === KEYS.FIVE_KEY;
+      },
+      perform: () => {
+        setCuePosition(trackDuration * 0.5);
+      },
+    },
+    SIXTY_PERCENT: {
+      keyTest: (event: globalThis.KeyboardEvent) => {
+        return event.key === KEYS.SIX_KEY;
+      },
+      perform: () => {
+        setCuePosition(trackDuration * 0.6);
+      },
+    },
+    SEVENTY_PERCENT: {
+      keyTest: (event: globalThis.KeyboardEvent) => {
+        return event.key === KEYS.SEVEN_KEY;
+      },
+      perform: () => {
+        setCuePosition(trackDuration * 0.7);
+      },
+    },
+    EIGHTY_PERCENT: {
+      keyTest: (event: globalThis.KeyboardEvent) => {
+        return event.key === KEYS.EIGHT_KEY;
+      },
+      perform: () => {
+        setCuePosition(trackDuration * 0.8);
+      },
+    },
+    NINETY_PERCENT: {
+      keyTest: (event: globalThis.KeyboardEvent) => {
+        return event.key === KEYS.NINE_KEY;
+      },
+      perform: () => {
+        setCuePosition(trackDuration * 0.9);
+      },
     },
   };
 
