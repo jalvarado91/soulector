@@ -30,7 +30,6 @@ export function useShortcutHandlers() {
     toggleMute: state.toggleMute,
     forward: state.forward,
     rewind: state.rewind,
-    setProgress: state.setProgress,
     trackDuration: state.trackDuration,
     setCuePosition: state.setCuePosition,
   });
@@ -44,7 +43,6 @@ export function useShortcutHandlers() {
     toggleMute,
     forward,
     rewind,
-    setProgress,
     trackDuration,
     setCuePosition,
   } = usePlayerStore(playerSelectors, shallow);
