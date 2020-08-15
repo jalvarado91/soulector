@@ -24,6 +24,7 @@ export type PlayerStore = {
   forward: (secs: number) => void;
   rewind: (secs: number) => void;
   lastVol: number;
+  setTrackDuration: (duration: number) => void;
 };
 
 export const [usePlayerStore] = create<PlayerStore>((set, get) => ({

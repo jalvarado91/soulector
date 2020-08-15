@@ -40,6 +40,8 @@ function Player() {
     setCuePosition: state.setCuePosition,
     forward: state.forward,
     rewind: state.rewind,
+    trackDuration: state.trackDuration,
+    setTrackDuration: state.setTrackDuration,
   });
 
   const {
@@ -58,6 +60,8 @@ function Player() {
     setCuePosition,
     forward,
     rewind,
+    trackDuration,
+    setTrackDuration,
   } = usePlayerStore(playerSelectors, shallow);
 
   const tracks = useTracksStore((state) => state.tracks);
@@ -104,6 +108,8 @@ function Player() {
                 onCuePositionChange={setCuePosition}
                 onForward={forward}
                 onRewind={rewind}
+                trackDuration={trackDuration}
+                setTrackDuration={setTrackDuration}
               />
             )}
           </div>
@@ -129,6 +135,8 @@ type PlayerControlsProps = {
   onCuePositionChange: (cuePos: number) => void;
   onForward: (secs: number) => void;
   onRewind: (secs: number) => void;
+  trackDuration: number;
+  setTrackDuration: (duration: number) => void;
 };
 
 function PlayerControls({
@@ -147,6 +155,8 @@ function PlayerControls({
   onCuePositionChange,
   onForward,
   onRewind,
+  trackDuration,
+  setTrackDuration,
 }: PlayerControlsProps) {
   const [debug] = useState(false);
 
@@ -155,7 +165,6 @@ function PlayerControls({
   const lastSeekPos = useRef(0);
   const [playerProgress, setPlayerProgress] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
-  const [trackDuration, setTrackDuration] = useState(0);
   const [seeking, setSeeking] = useState(false);
 
   function onPlayerReady(trackDuration: number) {
