@@ -3,6 +3,7 @@ import { sample } from "lodash-es";
 import { useTracksStore } from "../TracksStore";
 import shallow from "zustand/shallow";
 import { usePlayerStore } from "../PlayerStore";
+import ReactGA from "react-ga";
 
 export function useTrackListContainer(filterText: string) {
   const currentTrackId = usePlayerStore((state) => state.currentTrackId);
@@ -20,10 +21,21 @@ export function useTrackListContainer(filterText: string) {
   }, [fetchTracks]);
 
   function onTrackClick(trackId: string) {
+    const track = tracks.find((t) => t.id === trackId);
+    ReactGA.event({
+      category: "User",
+      action: "Track Click",
+      label: track && track.name ? track.name : trackId,
+    });
     play(trackId);
   }
 
   function onRandomClick() {
+    ReactGA.event({
+      category: "Action",
+      action: "Play Random",
+    });
+
     let track = sample(tracks);
     if (track) {
       play(track.id);
