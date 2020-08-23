@@ -34,7 +34,12 @@ export async function handler(event, context) {
     console.log("successfully retrieved tracks");
     return {
       statusCode: 200,
-      headers: { "Content-type": "application/json" },
+      headers: {
+        "Content-type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+      },
       body: JSON.stringify({ tracks: tracks })
     };
   } catch (err) {
